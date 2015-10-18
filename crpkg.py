@@ -152,7 +152,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.url is None:
-        repo_url = "https://github.com/revesansparole/starter_tpl/tree/master/repo"
+        repo_url = "https://github.com/revesansparole/ltpkgbuilder/tree/master/repo"
     else:
         repo_url = args.url
 
