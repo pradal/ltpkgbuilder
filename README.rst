@@ -20,7 +20,6 @@ Download the 'create_package.py' file, launch it and follow the step by step
 instructions.
 
 .. warning::
-
     Improve with virtualenv and step by step tutorial
 
 Default minimalistic package comes with:
