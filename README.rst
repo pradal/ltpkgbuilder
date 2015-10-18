@@ -24,9 +24,9 @@ instructions.
     Improve with virtualenv and step by step tutorial
 
 Default minimalistic package comes with:
-* Free software: CeCILL-C license
-* Easy testing setup with Nose_ ('nosetests')
-* Sphinx_ docs: Documentation ready for generation with, for example, ReadTheDocs_
+ * Free software: CeCILL-C license
+ * Easy testing setup with Nose_ ('nosetests')
+ * Sphinx_ docs: Documentation ready for generation with, for example, ReadTheDocs_
 
 Upgrade Package Structure
 -------------------------
