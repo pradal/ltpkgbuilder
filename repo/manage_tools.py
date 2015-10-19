@@ -1,4 +1,6 @@
 from github3 import GitHub
+from hashlib import sha512
+import json
 import os
 from os.path import basename, dirname, exists, isdir, normpath, splitext
 from os.path import join as pj
@@ -266,6 +268,28 @@ def replace(txt, handlers, env):
     return txt
 
 
+def get_info():
+    """ Read info file associated to this package
+
+    return:
+     - (dict of (str, dict)): option_name: options
+    """
+    with open("pkg_info.json", 'rb') as f:
+        info = json.load(f)
+
+    return info
+
+
+def write_info(info):
+    """ Store info associated to this package on disk
+
+    args:
+     - info (dict of (str, dict)): option_name, options
+    """
+    with open("pkg_info.json", 'wb') as f:
+        json.dump(info, f, sort_keys=True, indent=4)
+
+
 def get_revision(txt):
     """ Get file revision as defined locally by a single statement
     # rev =
@@ -276,6 +300,51 @@ def get_revision(txt):
             return int(line[8:].strip())
 
     return None
+
+
+def write_file(pth, content, hashmap):
+    """ Write the content of a file on a local path
+    register associated hash for further modification
+    tests.
+
+    args:
+     - pth (str): path to the new created file
+     - content (str): content to write on disk
+     - hashmap (dict of (str: sha512)): mapping between
+                 file path and hash keys
+    """
+    with open(pth, 'w') as f:
+        f.write(content)
+
+    algo = sha512()
+    algo.update(content)
+    hashmap[pth] = algo.digest().decode("latin1")
+
+
+def user_modified(pth, hashmap):
+    """ Check whether the file ahs been tempered by user
+    according to a stored hash.
+
+    args:
+     - pth (str): full path to the file
+     - hashmap (dict of pth: sha512): table of hash keys
+
+    return:
+     - False: if file do not have a hash or if stored hash
+              is different equal stored one
+     - True: if file hash is different from stored one
+    """
+    if pth not in hashmap:
+        return False
+
+    ref_hash = hashmap[pth]
+
+    algo = sha512()
+    with open(pth, 'r') as f:
+        algo.update(f.read())
+
+    new_hash = algo.digest().decode("latin1")
+    return new_hash != ref_hash
 
 
 # def compare_revision(file_pth, repo_url):

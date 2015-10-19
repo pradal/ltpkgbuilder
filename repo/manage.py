@@ -7,7 +7,12 @@ Use 'setup.py' for common tasks.
 import json
 from os import mkdir
 from os.path import exists
-from manage_tools import get, get_revision, ls, replace
+from urlparse import urlsplit
+
+from manage_tools import (get, get_revision, ls,
+                          get_info, write_info,
+                          replace,
+                          user_modified, write_file)
 
 
 default_repo = "."
@@ -26,8 +31,7 @@ def add_option(name, repo=default_repo, extra=None, env=None):
     if extra is None:
         extra = {}
 
-    with open("pkg_info.json", 'r') as f:
-        info = json.load(f)
+    info = get_info()
 
     if name in info:
         raise UserWarning("option already included in this package")
@@ -49,8 +53,52 @@ def add_option(name, repo=default_repo, extra=None, env=None):
 
     # write new pkg_info file
     info[name] = option_cfg
-    with open("pkg_info.json", 'w') as f:
-        json.dump(info, f)
+    write_info(info)
+
+
+def check_tempering(cur_src_pth, cur_dst_pth, repo_url, handlers, info, env, tf):
+    """ Parse cur_src_pth assumed to be a directory
+    in repository and check all files in it to detect
+    tempering by user
+
+    Function called recursively on sub directories
+
+    Does not make any test on the existence of cur_dst_pth
+
+    args:
+     - cur_src_pth (str): current pth to look into
+     - cur_dst_pth (str): mirror of cur_src_pth on destination
+     - repo_url (str): base url of source repository
+     - handlers (dict of func): associate keys to handler functions
+     - info (dict): more information to pass to handlers
+     - env (dict): environment for github
+     - tf (list of str): list of tempered files to update, side effect
+    """
+    print "check", cur_src_pth, cur_dst_pth
+    items = ls(cur_src_pth, repo_url)
+    for name, is_dir_type in items:
+        if is_dir_type:
+            new_name = replace(name, handlers, info)
+            if new_name != "":
+                dst_dir = cur_dst_pth + "/" + new_name
+                if not exists(dst_dir):
+                    print "Directory '%s' has been removed" % dst_dir
+                else:
+                    check_tempering(cur_src_pth + "/" + name,
+                                    dst_dir,
+                                    repo_url,
+                                    handlers,
+                                    info,
+                                    env,
+                                    tf)
+        else:
+            print "check file", name
+            new_name = replace(name, handlers, info)
+            if new_name != "":
+                pth = cur_dst_pth + "/" + new_name
+                if user_modified(pth, info['hash']):
+                    print "user modified file: %s" % pth
+                    tf.append(pth)
 
 
 def regenerate_dir(cur_src_pth, cur_dst_pth, repo_url, handlers, info, env):
@@ -93,8 +141,9 @@ def regenerate_dir(cur_src_pth, cur_dst_pth, repo_url, handlers, info, env):
                 src_content = get(cur_src_pth + "/" + name, repo_url, env)
                 new_src_content = replace(src_content, handlers, info)
                 # overwrite file without any warning
-                with open(cur_dst_pth + "/" + new_name, 'w') as f:
-                    f.write(new_src_content)
+                write_file(cur_dst_pth + "/" + new_name,
+                           new_src_content,
+                           info['hash'])
 
 
 def regenerate(repo=default_repo, target=".", env=None):
@@ -105,7 +154,14 @@ def regenerate(repo=default_repo, target=".", env=None):
      - target (str): target directory to write into
      - env (dict): environment for github access
     """
+    # load info file
+    info = get_info()
+
+    print "info", info
+    # hash = info['hash']
+
     # check for new version of this file and tools file
+    need_reload = False
     for filename in ("manage.py", "manage_tools.py")[:1]:
         with open(filename, 'r') as f:
             local_rev = get_revision(f.read())
@@ -115,17 +171,24 @@ def regenerate(repo=default_repo, target=".", env=None):
 
         if rev > local_rev:
             print "newer file: %s" % filename
-            with open(filename, 'w') as f:
-                f.write(txt)
+            if user_modified(filename, hash):
+                raise UserWarning("File has been modified by user")
+
+            write_file(filename, txt, info['hash'])
+            # with open(filename, 'w') as f:
+            #     f.write(txt)
+            need_reload = True
+
+    if need_reload:
+        print "manage.py have been updated with new version, relaunch"
+        return
 
     # parse options and load handlers
-    with open("pkg_info.json", 'r') as f:
-        info = json.load(f)
-
-    print "info", info
-
     handlers = {}
-    for opt_name in info.keys():
+    installed_options = info.keys()
+    installed_options.remove("hash")
+
+    for opt_name in installed_options:
         # find definition file
         try:
             pycode = get("option/%s/handlers.py" % opt_name, repo, env)
@@ -137,6 +200,63 @@ def regenerate(repo=default_repo, target=".", env=None):
         handlers.update(d['handlers'])
 
     print "handlers", handlers
+    # walk all files in repo to check for possible tempering
+    # of files by user
+    tf = []
+    check_tempering("base", target, repo, handlers, info, env, tf)
+    if len(tf) > 0:
+        msg = "These files have been modified by user:\n"
+        msg += "\n".join(tf)
+        raise UserWarning(msg)
+
     # walk all files in repo and regenerate them
     regenerate_dir("base", target, repo, handlers, info, env)
 
+    # rewrite info
+    write_info(info)
+
+
+if __name__ == '__main__':
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser(description='Package structure manager')
+    parser.add_argument('action', metavar='action',
+                        help="action to perform on package")
+
+    parser.add_argument('-url', '--url', metavar='repo_url',
+                        help="url of repository for fetching definitions")
+
+    parser.add_argument('-u', '--user', metavar='user',
+                        help="github username")
+
+    parser.add_argument('-p', '--password', metavar='password',
+                        help="github password")
+
+    args = parser.parse_args()
+
+    if args.url is None:
+        repo_url = "https://github.com/revesansparole/ltpkgbuilder/tree/master/repo"
+    else:
+        repo_url = args.url
+
+    if urlsplit(repo_url).netloc == '':
+        env = None
+    else:
+        user = args.user
+        if user is None:
+            user = raw_input("user:")
+
+        if len(user) == 0:  # anonymous login
+            env = {}
+        else:
+            pwd = args.password
+            if pwd is None:
+                pwd = raw_input("password:")
+
+            env = dict(user=user, password=pwd)
+
+    if args.action == 'upgrade':
+        print "upgrade"
+        regenerate(repo_url, env=env)
+    else:
+        print "unknown"

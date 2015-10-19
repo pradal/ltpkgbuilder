@@ -1,7 +1,8 @@
 import json
 from nose.tools import assert_raises, with_setup
-from os import remove
+from os import mkdir, remove
 from os.path import exists
+from shutil import copytree, rmtree
 
 from manage import add_option
 
@@ -29,7 +30,16 @@ def test_add_non_existing_option_raises_warning():
 
 @with_setup(setup, teardown)
 def test_add_option_bad_config_raises_warning():
-    assert_raises(SyntaxError, lambda: add_option('badtest'))
+    copytree("base", 'opt_toto/base')
+    mkdir("opt_toto/option")
+    mkdir("opt_toto/option/badtest")
+    with open("opt_toto/option/badtest/config.py", 'w') as f:
+        f.write("print 'bla'")
+        f.close()
+
+    assert_raises(SyntaxError, lambda: add_option('badtest', repo="opt_toto"))
+
+    rmtree("opt_toto")
 
 
 @with_setup(setup, teardown)

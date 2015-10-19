@@ -114,7 +114,7 @@ def main(name, repo_url, env):
     # create a basic package info with info harvested
     # during the creation process
     with open(root + "/pkg_info.json", 'w') as f:
-        json.dump({}, f)
+        json.dump({"hash": {}}, f)
 
     # add base option
     extra = dict(pkgname=name)

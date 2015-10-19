@@ -23,7 +23,7 @@ def setup():
         copytree("option", repo + "/option")
 
     with open("pkg_info.json", 'w') as f:
-        json.dump({}, f)
+        json.dump({'hash': {}}, f)
 
     add_option('base')
     # add_option('test1')
