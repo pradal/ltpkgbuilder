@@ -12,7 +12,8 @@ from urlparse import urlsplit
 from manage_tools import (get, get_revision, ls,
                           get_info, write_info,
                           replace,
-                          user_modified, write_file)
+                          user_modified, write_file,
+                          src_dir, create_namespace_dir)
 
 
 default_repo = "."
@@ -54,6 +55,33 @@ def add_option(name, repo=default_repo, extra=None, env=None):
     # write new pkg_info file
     info[name] = option_cfg
     write_info(info)
+
+
+def load_handlers(repo, env):
+    """ Load handlers for installed options
+
+    args:
+     - repo (url): url of repository to find handlers definitions
+     - env (dict): environment for github
+    """
+    info = get_info()
+
+    handlers = {}
+    installed_options = info.keys()
+    installed_options.remove("hash")
+
+    for opt_name in installed_options:
+        # find definition file
+        try:
+            pycode = get("option/%s/handlers.py" % opt_name, repo, env)
+        except IOError:
+            raise UserWarning("option '%s' does not exists" % opt_name)
+
+        d = {}
+        eval(compile(pycode, "handlers", 'exec'), d)
+        handlers.update(d['handlers'])
+
+    return handlers
 
 
 def check_tempering(cur_src_pth, cur_dst_pth, repo_url, handlers, info, env, tf):
@@ -117,7 +145,23 @@ def regenerate_dir(cur_src_pth, cur_dst_pth, repo_url, handlers, info, env):
      - handlers (dict of func): associate keys to handler functions
      - info (dict): more information to pass to handlers
      - env (dict): environment for github
+
+    return:
+     - cur_dst_pth (str): in case it has been modified
     """
+    if cur_src_pth == "base/src":
+        print "specific treatment for src"
+        # check for namespace directory
+        namespace = info['base']['namespace']
+        if namespace is not None:
+            cur_dst_pth = create_namespace_dir(cur_dst_pth, namespace)
+
+        # create pkgname directory in src
+        pkgname = info['base']['pkgname']
+        cur_dst_pth = cur_dst_pth + "/" + pkgname
+        if not exists(cur_dst_pth):
+            mkdir(cur_dst_pth)
+
     print "act", cur_src_pth, cur_dst_pth
     items = ls(cur_src_pth, repo_url)
     for name, is_dir_type in items:
@@ -157,9 +201,6 @@ def regenerate(repo=default_repo, target=".", env=None):
     # load info file
     info = get_info()
 
-    print "info", info
-    # hash = info['hash']
-
     # check for new version of this file and tools file
     need_reload = False
     for filename in ("manage.py", "manage_tools.py")[:1]:
@@ -171,7 +212,7 @@ def regenerate(repo=default_repo, target=".", env=None):
 
         if rev > local_rev:
             print "newer file: %s" % filename
-            if user_modified(filename, hash):
+            if user_modified(filename, info['hash']):
                 raise UserWarning("File has been modified by user")
 
             write_file(filename, txt, info['hash'])
@@ -184,22 +225,8 @@ def regenerate(repo=default_repo, target=".", env=None):
         return
 
     # parse options and load handlers
-    handlers = {}
-    installed_options = info.keys()
-    installed_options.remove("hash")
+    handlers = load_handlers(repo, env)
 
-    for opt_name in installed_options:
-        # find definition file
-        try:
-            pycode = get("option/%s/handlers.py" % opt_name, repo, env)
-        except IOError:
-            raise UserWarning("option '%s' does not exists" % opt_name)
-
-        d = {}
-        eval(compile(pycode, "handlers", 'exec'), d)
-        handlers.update(d['handlers'])
-
-    print "handlers", handlers
     # walk all files in repo to check for possible tempering
     # of files by user
     tf = []

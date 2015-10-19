@@ -9,6 +9,7 @@ from manage import regenerate, add_option
 repo = "takapouet"
 rb = repo + "/base"
 
+
 def setup():
     if not exists(repo):
         mkdir(repo)
@@ -25,7 +26,7 @@ def setup():
     with open("pkg_info.json", 'w') as f:
         json.dump({'hash': {}}, f)
 
-    add_option('base')
+    add_option('base', extra={'pkg_fullname': repo})
     # add_option('test1')
 
 

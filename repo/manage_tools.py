@@ -2,11 +2,47 @@ from github3 import GitHub
 from hashlib import sha512
 import json
 import os
+from os import mkdir
 from os.path import basename, dirname, exists, isdir, normpath, splitext
 from os.path import join as pj
 from StringIO import StringIO
 from urlparse import urlsplit
 from zipfile import BadZipfile, ZipFile
+
+
+def src_dir(info):
+    """ Compute name of src dir according to pkgname
+    in info
+    """
+    rep = "src"
+    namespace = info['base']['namespace']
+    if namespace is not None:
+        rep = rep + "/" + namespace
+
+    pkgname = info['base']['pkgname']
+    rep = rep + "/" + pkgname
+
+    return rep
+
+
+def create_namespace_dir(dst, namespace):
+    """ Create and empty dir with specific __init__.py
+    for namespace packages.
+
+    args:
+     - dst (str): path in which to create the directory
+     - namespace (str): namespace to use
+    """
+    pth = dst + "/" + namespace
+    if not exists(pth):
+        mkdir(pth)
+
+    init_pth = pth + "/__init_.py"
+    if not exists(init_pth):
+        with open(init_pth, 'w') as f:
+            f.write("__import__('pkg_resources').declare_namespace(__name__)\n")
+
+    return pth
 
 
 def parse_github_url(url):
@@ -19,7 +55,7 @@ def parse_github_url(url):
      - (str, str, str): (author, repo_name, branch, pth)
     """
     url = urlsplit(url)
-    assert url.netloc == "github.com"
+    assert url.netloc.lower() == "github.com"
     elms = url.path.split("/")
     author = elms[1]
     repo_name = elms[2]

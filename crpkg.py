@@ -11,12 +11,12 @@ from urlparse import urlsplit
 from zipfile import BadZipfile, ZipFile
 
 
-def parse_github_url(url):
-    """ Local copy of manage_tools.py:parse_github_url
+def parse_github_url(gh_url_str):
+    """ Local copy of manage_tools.py:parse_GitHub_url
     """
-    url = urlsplit(url)
-    assert url.netloc == "github.com"
-    elms = url.path.split("/")
+    gh_url = urlsplit(gh_url_str)
+    assert gh_url.netloc.lower() == "github.com"
+    elms = gh_url.path.split("/")
     author = elms[1]
     repo_name = elms[2]
     if len(elms) == 3:
@@ -52,7 +52,7 @@ def get(file_name, repo_url=".", env=None):
             except BadZipfile:
                 msg = "Repo must either be a directory or a valid zip file"
                 raise UserWarning(msg)
-    else:  # remote file on github
+    else:  # remote file on GitHub
         author, repo_name, branch, pth = parse_github_url(repo_url)
         try:
             gh = GitHub(login=env['user'], password=env['password'])
@@ -78,7 +78,7 @@ def get(file_name, repo_url=".", env=None):
 def main(name, repo_url, env):
     """ Create a new package from scratch. Just
     copy manage.py and manage_tools.py in a new
-    driectory and add 'base' option.
+    directory and add 'base' option.
 
     .. warning: need to run the newly created manage.py
                 to obtain a valid package.
@@ -87,7 +87,7 @@ def main(name, repo_url, env):
      - name (str): full package name including namespaces
                    e.g. 'mypkg' or 'openalea.mypkg'
      - repo_url (str): url of repository to use for fetching files
-     - env (dict): github environment
+     - env (dict): GitHub environment
     """
     root = name.split(".")[-1]
 
@@ -101,14 +101,14 @@ def main(name, repo_url, env):
         mkdir(root)
 
     # copy manage.py and tools files
-    for fname in ("manage.py", "manage_tools.py"):
+    for filename in ("manage.py", "manage_tools.py"):
         try:
-            pycode = get(fname, repo_url, env)
-            with open(root + "/" + fname, 'w') as f:
+            pycode = get(filename, repo_url, env)
+            with open(root + "/" + filename, 'w') as f:
                 f.write(pycode)
                 f.close()
         except OSError:
-            msg = "Bad repository format, must contain '%s'" % fname
+            msg = "Bad repository format, must contain '%s'" % filename
             raise UserWarning(msg)
 
     # create a basic package info with info harvested
@@ -117,7 +117,7 @@ def main(name, repo_url, env):
         json.dump({"hash": {}}, f)
 
     # add base option
-    extra = dict(pkgname=name)
+    extra = dict(pkg_fullname=name)
 
     if urlsplit(repo_url).netloc == '':
         repo_url = abspath(repo_url)
@@ -128,8 +128,17 @@ def main(name, repo_url, env):
     execfile("manage.py", d)
     d['add_option']("base", repo_url, extra, env)
 
-    # launch regenerate
-    d['regenerate'](repo_url, env=env)
+    # generate package
+    handlers = d['load_handlers'](repo_url, env=env)
+    info = d['get_info']()
+    d['regenerate_dir']("base", ".", repo_url, handlers, info, env)
+    d['write_info'](info)
+
+    # generate examples
+    src_pth = d['src_dir'](info)
+    print "src", src_pth
+    d['regenerate_dir']("example/src", src_pth, repo_url, handlers, info, env)
+    d['regenerate_dir']("example/test", "test", repo_url, handlers, info, env)
 
 
 if __name__ == '__main__':
@@ -138,25 +147,25 @@ if __name__ == '__main__':
 
     parser = ArgumentParser(description='Package creator')
     parser.add_argument('pkgname', metavar='pkg_name',
-                        help="name of the package to create")  # TODO add gestion of namespace.pkg
+                        help="name of the package to create")
 
     parser.add_argument('-url', '--url', metavar='repo_url',
                         help="url of repository for fetching definitions")
 
     parser.add_argument('-u', '--user', metavar='user',
-                        help="github username")
+                        help="GitHub username")
 
     parser.add_argument('-p', '--password', metavar='password',
-                        help="github password")
+                        help="GitHub password")
 
     args = parser.parse_args()
 
     if args.url is None:
-        repo_url = "https://github.com/revesansparole/ltpkgbuilder/tree/master/repo"
+        url = "https://github.com/revesansparole/ltpkgbuilder/tree/master/repo"
     else:
-        repo_url = args.url
+        url = args.url
 
-    if urlsplit(repo_url).netloc == '':
+    if urlsplit(url).netloc == '':
         env = None
     else:
         user = args.user
@@ -172,4 +181,4 @@ if __name__ == '__main__':
 
             env = dict(user=user, password=pwd)
 
-    main(args.pkgname, repo_url, env)
+    main(args.pkgname, url, env)

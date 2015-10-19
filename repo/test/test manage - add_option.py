@@ -19,7 +19,7 @@ def teardown():
 
 @with_setup(setup, teardown)
 def test_add_already_existing_option_raises_warning():
-    add_option('base')
+    add_option('base', extra={'pkg_fullname': 'toto'})
     assert_raises(UserWarning, lambda: add_option('base'))
 
 
@@ -49,6 +49,6 @@ def test_add_option_pass_environment_to_config():
 
 @with_setup(setup, teardown)
 def test_add_option_register():
-    add_option('base')
+    add_option('base', extra={'pkg_fullname': 'toto'})
     add_option('test1')
 
