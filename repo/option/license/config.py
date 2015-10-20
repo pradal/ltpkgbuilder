@@ -2,7 +2,9 @@ def main(info, extra):
     try:
         name = extra['license']
     except KeyError:
-        name = raw_input("license name:")
+        name = raw_input("license name [mit]:")
+        if name == "":
+            name = "mit"
 
     try:
         year = extra['year']

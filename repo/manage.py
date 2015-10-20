@@ -123,7 +123,7 @@ def check_tempering(cur_src_pth, cur_dst_pth, repo_url, handlers, info, env, tf)
         else:
             print "check file", name
             new_name = replace(name, handlers, info)
-            if new_name != "":
+            if new_name.split(".")[0] != "_":
                 pth = cur_dst_pth + "/" + new_name
                 if user_modified(pth, info['hash']):
                     print "user modified file: %s" % pth
@@ -182,7 +182,7 @@ def regenerate_dir(cur_src_pth, cur_dst_pth, repo_url, handlers, info, env):
         else:
             print "act file", name
             new_name = replace(name, handlers, info)
-            if new_name != "":  # TODO: Bof when removing one option
+            if new_name.split(".")[0] != "_":  # TODO: Bof when removing one option
                 src_content = get(cur_src_pth + "/" + name, repo_url, env)
                 new_src_content = replace(src_content, handlers, info)
                 # overwrite file without any warning

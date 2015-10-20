@@ -221,7 +221,7 @@ class Node(object):
 
 
 def parse(txt):
-    """ Parse a text for '{{class: bla }}' sections
+    """ Parse a text for '{{class, bla }}' sections
     and construct a tree of nested sections
     """
     root = Node("root", None)

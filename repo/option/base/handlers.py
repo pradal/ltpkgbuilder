@@ -2,6 +2,10 @@ def remove(txt, env):
     return ""
 
 
+def delete(txt, env):
+    return "_"
+
+
 def upper(txt, env):
     return txt.upper()
 
@@ -24,6 +28,7 @@ def key(txt, env):
 
 handlers = {'remove': remove,
             'rm': remove,
+            'del': delete,
             'upper': upper,
             'lower': lower,
             'key': key}
