@@ -260,6 +260,9 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--password', metavar='password',
                         help="github password")
 
+    parser.add_argument('-opt', '--option', metavar='option_name',
+                        help="argument for action=add")
+
     args = parser.parse_args()
 
     if args.url is None:
@@ -286,5 +289,7 @@ if __name__ == '__main__':
     if args.action == 'upgrade':
         print "upgrade"
         regenerate(repo_url, env=env)
+    elif args.action == 'add':
+        add_option(args.option, repo_url, extra=None, env=env)
     else:
         print "unknown"
