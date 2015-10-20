@@ -11,7 +11,7 @@ from urlparse import urlsplit
 
 from manage_tools import (get, get_revision, ls,
                           get_info, write_info,
-                          replace,
+                          same, replace,
                           user_modified, write_file,
                           src_dir, create_namespace_dir)
 
@@ -71,6 +71,7 @@ def load_handlers(repo, env):
     installed_options.remove("hash")
 
     for opt_name in installed_options:
+        handlers[opt_name] = same
         # find definition file
         try:
             pycode = get("option/%s/handlers.py" % opt_name, repo, env)
