@@ -257,13 +257,47 @@ def same(txt, env):
     return txt
 
 
+def remove(txt, env):
+    """ Return empty string
+    """
+    return ""
+
+
+def delete(txt, env):
+    """ Return '_' string used by some function
+    to recognize empty names
+    """
+    return "_"
+
+
+def get_key(txt, env):
+    """ Fetch a specific key in env
+    """
+    try:
+        elms = txt.split(".")
+        d = env
+        for k in elms:
+            d = d[k]
+
+        return d
+    except KeyError:
+        return txt
+
+
+loc_handlers = {'remove': remove,
+                'rm': remove,
+                'del': delete,
+                'key': get_key}
+
+
 def get_handler(key, handlers):
     """ Return an instance of a handler
     handler(txt) -> modified txt
     """
+    all_hands = dict(loc_handlers.items() + handlers.items())
     for k in key.split(" "):
-        if k in handlers:
-            return handlers[k]
+        if k in all_hands:
+            return all_hands[k]
 
     return same
 
@@ -279,11 +313,11 @@ def div_replace(parent, handlers, env):
             frags = "".join(node.data).splitlines()
             if len(frags) > 0:
                 # remove unnecessary '#'
-                lfrag = frags[-1].strip()
-                if lfrag == '#':  # new line comment
-                    del frags[-1]
-                elif len(lfrag) > 0 and lfrag[-1] == '#':  # inline comment
+                lfrag = frags[-1].rstrip()
+                if len(lfrag) > 0 and lfrag[-1] == '#':  # comment spotted
                     frags[-1] = lfrag[:-1]
+                    if len(frags[-1]) == 0:  # full line comment
+                        del frags[-1]
 
             txt += "\n".join(frags)
         elif node.typ == 'div':

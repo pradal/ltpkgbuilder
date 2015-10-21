@@ -1,0 +1,10 @@
+{
+  "option": [
+    "base"
+  ],
+  "setup": [
+    "nose"
+  ],
+  "install": [
+  ]
+}

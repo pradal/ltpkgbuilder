@@ -10,7 +10,11 @@ def is_valid_identifier(name):
 
 
 def main(info, extra):
-    pkg_fullname = extra["pkg_fullname"]
+    try:
+        pkg_fullname = extra["pkg_fullname"]
+    except KeyError:
+        pkg_fullname = raw_input("package full name:")
+
     if "." in pkg_fullname:
         try:
             namespace, pkgname = pkg_fullname.split(".")

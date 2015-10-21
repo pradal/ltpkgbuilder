@@ -1,6 +1,6 @@
 import json
 from nose.tools import assert_raises, with_setup
-from os import mkdir, remove, walk
+from os import listdir, mkdir, remove, walk
 from os.path import exists
 from shutil import copytree, rmtree
 
@@ -117,7 +117,10 @@ def test_regenerate_replace_file_names():
 
 @with_setup(setup, teardown)
 def test_regenerate_do_not_create_file_with_empty_name():
-    with open(rb + "/{{rm, toto.txt}}", 'w') as f:
+    with open(rb + "/{{del, toto.txt}}", 'w') as f:
+        f.write("loren ipsum")
+
+    with open(rb + "/{{del, titi}}.txt", 'w') as f:
         f.write("loren ipsum")
 
     # do regenerate
@@ -125,8 +128,11 @@ def test_regenerate_do_not_create_file_with_empty_name():
     mkdir(nr)
     regenerate(repo, nr)
 
-    assert not exists(nr + "/{{rm, toto.txt}}")
+    assert not exists(nr + "/{{del, toto.txt}}")
     assert not exists(nr + "/toto.txt")
+    assert not exists(nr + "/{{del, titi}}.txt")
+    assert not exists(nr + "/titi.txt")
+    assert len(listdir(nr)) == 0
 
     rmtree(nr)
 

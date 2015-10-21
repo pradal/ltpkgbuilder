@@ -7,7 +7,7 @@
 from setuptools import setup, find_packages
 
 
-short_descr = "$project_short_description"
+short_descr = "{{key, dist.description}}"
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
@@ -23,25 +23,28 @@ version = {}
 with open("src/$pkg_pth/version.py") as fp:
     exec(fp.read(), version)
 
-url = 'https://github.com/$github_username/$pkg_pth'
+url = '{{github rm, https://github.com/{{key, github.user}}/{{key, github.pkg_pth}}}}'
 
 
 setup(
-    name='$pkg_name',
+    name='{{key, base.pkg_fullname}}',
     version=version["__version__"],
     description=short_descr,
     long_description=readme + '\n\n' + history,
-    author="$author_name",
+    author="{{key, base.author_name}}",
     author_email='$author_email',
     url=url,
-    license="Cecill-C",
+    # {{license.setup,
+    license="None",
+    # }}
     zip_safe=False,
 
     packages=find_packages('src'),
     package_dir={'': 'src'},
+    # {{data rm,
     include_package_data=True,
-    package_data={'': ['data']},
-
+    package_data={'': []},
+    # }}
     install_requires=requirements,
     entry_points={
         # 'console_scripts': [
@@ -51,7 +54,7 @@ setup(
         #      'wralea': wralea_entry_points
     },
 
-    keywords='$keywords',
+    keywords='{{key, dist.keywords}}',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',

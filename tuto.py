@@ -22,7 +22,13 @@ chdir("toto")
 # with open("pkg_info.json", 'w') as f:
 #     json.dump(info, f)
 
-call("python manage.py add -opt github -url ..\\repo")
-call("python manage.py add -opt license -url ..\\repo")
+# call("python manage.py add -opt github -url ..\\repo")
+# call("python manage.py add -opt license -url ..\\repo")
+#
+# call("python manage.py add -opt dist -url ..\\repo")
+
+call("python manage.py add -opt base -url ..\\repo")
+call("python manage.py add -opt test -url ..\\repo")
+call("python manage.py add -opt doc -url ..\\repo")
 
 call("python manage.py upgrade -url ..\\repo")

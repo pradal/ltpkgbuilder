@@ -80,3 +80,11 @@ def test_replace_pass_env_to_handlers():
     handlers = {'use_env': use_env}
     new_txt = replace(txt, handlers, {'toto': 'new toto'})
     assert new_txt == "print 'new toto'"
+
+
+def test_replace_preserve_indentation():
+    txt = "print 'toto'\n\t# {{upper, toto}}"
+    handlers = {'upper': upper}
+    new_txt = replace(txt, handlers, None)
+    print repr(new_txt)
+    assert new_txt == "print 'toto'\n\tTOTO"

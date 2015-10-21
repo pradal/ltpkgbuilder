@@ -13,4 +13,9 @@ def generate(txt, env):
     return license_txt
 
 
-handlers = {"license.generate": generate}
+def setup(txt, env):
+    return 'license="%s",' % env['license']['name']
+
+
+handlers = {"license.generate": generate,
+            "license.setup": setup}

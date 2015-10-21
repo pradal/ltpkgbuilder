@@ -116,29 +116,29 @@ def main(name, repo_url, env):
     with open(root + "/pkg_info.json", 'w') as f:
         json.dump({"hash": {}}, f)
 
-    # add base option
-    extra = dict(pkg_fullname=name)
-
-    if urlsplit(repo_url).netloc == '':
-        repo_url = abspath(repo_url)
-
-    sys.path.append(abspath(root))
-    chdir(root)
-    d = {}
-    execfile("manage.py", d)
-    d['add_option']("base", repo_url, extra, env)
-
-    # generate package
-    handlers = d['load_handlers'](repo_url, env=env)
-    info = d['get_info']()
-    d['regenerate_dir']("base", ".", repo_url, handlers, info, env)
-    d['write_info'](info)
-
-    # generate examples
-    src_pth = d['src_dir'](info)
-    print "src", src_pth
-    d['regenerate_dir']("example/src", src_pth, repo_url, handlers, info, env)
-    d['regenerate_dir']("example/test", "test", repo_url, handlers, info, env)
+    # # add base option
+    # extra = dict(pkg_fullname=name)
+    #
+    # if urlsplit(repo_url).netloc == '':
+    #     repo_url = abspath(repo_url)
+    #
+    # sys.path.append(abspath(root))
+    # chdir(root)
+    # d = {}
+    # execfile("manage.py", d)
+    # d['add_option']("base", repo_url, extra, env)
+    #
+    # # generate package
+    # handlers = d['load_handlers'](repo_url, env=env)
+    # info = d['get_info']()
+    # d['regenerate_dir']("base", ".", repo_url, handlers, info, env)
+    # d['write_info'](info)
+    #
+    # # generate examples
+    # src_pth = d['src_dir'](info)
+    # print "src", src_pth
+    # d['regenerate_dir']("example/src", src_pth, repo_url, handlers, info, env)
+    # d['regenerate_dir']("example/test", "test", repo_url, handlers, info, env)
 
 
 if __name__ == '__main__':

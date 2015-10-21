@@ -7,6 +7,7 @@ Use 'setup.py' for common tasks.
 import json
 from os import mkdir
 from os.path import exists
+import pip
 from urlparse import urlsplit
 
 from manage_tools import (get, get_revision, ls,
@@ -36,6 +37,31 @@ def add_option(name, repo=default_repo, extra=None, env=None):
 
     if name in info:
         raise UserWarning("option already included in this package")
+
+    require = json.loads(get("option/%s/requirements.json" % name, repo, env))
+
+    # find other option requirements in repository
+    for option_name in require['option']:
+        if option_name not in info:
+            print "need to install option '%s' first" % option_name
+            ans = raw_input("install [y], n?")
+            if ans in ("", "y"):
+                add_option(option_name, repo, extra, env)
+
+            return
+
+    # find extra package requirements for setup
+    installed = set(p.project_name for p in pip.get_installed_distributions())
+    to_install = [n for n in require['setup'] if n not in installed]
+    if len(to_install) > 0:
+        print "this option requires additional packages to setup:"
+        print ", ".join(to_install)
+        ans = raw_input("install [y], n?")
+        if ans in ("", "y"):
+            pip.main(['install'] + to_install)
+
+        print "ralaunch manage.py add option"
+        return
 
     # find option definition in repository
     try:
@@ -103,6 +129,8 @@ def check_tempering(cur_src_pth, cur_dst_pth, repo_url, handlers, info, env, tf)
      - env (dict): environment for github
      - tf (list of str): list of tempered files to update, side effect
     """
+    # TODO: bug dos not handle src/namespace/pkg
+
     print "check", cur_src_pth, cur_dst_pth
     items = ls(cur_src_pth, repo_url)
     for name, is_dir_type in items:
@@ -150,18 +178,19 @@ def regenerate_dir(cur_src_pth, cur_dst_pth, repo_url, handlers, info, env):
     return:
      - cur_dst_pth (str): in case it has been modified
     """
-    if cur_src_pth == "base/src":
+    if cur_src_pth == "base/{{base rm, src}}":
         print "specific treatment for src"
-        # check for namespace directory
-        namespace = info['base']['namespace']
-        if namespace is not None:
-            cur_dst_pth = create_namespace_dir(cur_dst_pth, namespace)
+        if 'base' in info:
+            # check for namespace directory
+            namespace = info['base']['namespace']
+            if namespace is not None:
+                cur_dst_pth = create_namespace_dir(cur_dst_pth, namespace)
 
-        # create pkgname directory in src
-        pkgname = info['base']['pkgname']
-        cur_dst_pth = cur_dst_pth + "/" + pkgname
-        if not exists(cur_dst_pth):
-            mkdir(cur_dst_pth)
+            # create pkgname directory in src
+            pkgname = info['base']['pkgname']
+            cur_dst_pth = cur_dst_pth + "/" + pkgname
+            if not exists(cur_dst_pth):
+                mkdir(cur_dst_pth)
 
     print "act", cur_src_pth, cur_dst_pth
     items = ls(cur_src_pth, repo_url)
