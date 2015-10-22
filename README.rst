@@ -17,42 +17,69 @@ of a python programmer as easy as possible by providing two core functions:
 Quick start
 -----------
 
-Download the 'create_package.py' file, launch it and follow the step by step
-instructions::
+Create a virtual environment for development::
 
-    $ python crpkg.py mypkg
+    $ virtualenv dvlpt
 
-.. warning::
-   Improve with virtualenv and step by step tutorial
+Activate it::
 
-Default minimalistic package comes with:
+    $ dvlpt/Scripts/activate
 
- * Free software: CeCILL-C license
- * Easy testing setup with Nose_ ('nosetests')
- * Sphinx_ docs: Documentation ready for generation with, for example, ReadTheDocs_
+Install ltpkgbuilder_::
+
+    (dvlpt)$ pip install ltpkgbuilder
+
+Create a directory for your package::
+
+    (dvlpt)$ mkdir toto
+
+Run 'manage' inside this directory::
+
+    (dvlpt)$ cd toto
+    (dvlpt)$ manage init
+    (dvlpt)$ manage add -opt base
+    (dvlpt)$ manage regenerate
+
+This will create the bare basic minimum for a python package. Add more options
+(see `Add Package Structure Functionality`_ for more options) afterward.
+
+Default minimalistic package comes with just a 'src' directory to put your code
+in it :)
 
 Upgrade Package Structure
 -------------------------
 
 Packages generated with Package Builder contains three different types of files:
 
- - resources files that contains information entered by developers at some stage
+ - 'pkg_cfg.json', a resource file that contains information entered by developers
+   at some stage during the configuration phase of adding an option.
  - generated files, susceptible to be regenerated at any time or with version
    change and not meant to be modified by user. These files are generated
-   automatically by the package builder using up to date templates stored on
-   internet (or a local repository)
+   automatically by the package builder using templates provided with the package.
  - developer data and modules edited by hand which contains the actual python
-   code of the package independently of the structure of the package.
+   code of the package independently of the structure of the package. ltpkgbuilder_
+   will never touch them. If they conflict with some files used by a newly
+   added option, the user will be prompted and will have to solve the conflict
+   to install the option.
 
-A call to the 'upgrade' command will check for new versions of each structure
+A call to the 'update' command will check for new versions of each structure
 file, fetch the new template and instantiate it with the local meta info stored
 in the package. If new meta info are required, the developer will be prompted
-during the upgrade. None of the files edited by the developer will be modified::
+during the update. None of the files edited by the developer will be modified::
 
-    $ python manage.py upgrade
+    (dvlpt)$ manage update
 
-Alternatively, specifying a '-repository=pth' argument will provide an
-alternative place to look for updates in case of bad internet connection.
+This command requires an internet connection since local installation will be
+compared to current code on github.
+
+If update is successful, a call to regenerate is mandatory to rebuilt the package
+structural files::
+
+    (dvlpt)$ manage regenerate
+
+This phase will never overwrite files modified or created by user. In case of
+conflicts it is the responsibility of the user to solve them and relaunch the
+command.
 
 Add Package Structure Functionality
 -----------------------------------
@@ -62,18 +89,24 @@ already existing package:
 
  - license: will help the developer to choose a license and add the relevant
    files
+ - doc: Add some documentation to your package
+ - test: basic unitests using nose
+ - pydist: make your package distributable with setuptools (i.e. setup.py)
  - data: will guide through all the steps to add non python files to a package
  - github: will guide through all the step to safely store the package on Github_
  - tox: defines config files to use multi environment testing, Tox_
  - travis: will guide through all the steps to compile the code on Travis-CI_
  - coverage: add code coverage_ to the basic test configuration
- - namespace: add the package into a virtual namespace (e.g. openalea_, zope_)
  - lint: install and config tools to check for code compliance to python Flake8_
    guidelines.
  - pypi: step by step guide and configuration to upload package on PyPi_.
+ - readthedocs: step by step guide to have your documentation on ReadTheDocs_
 
-Add functionality in the package
---------------------------------
+Extra services
+--------------
+
+.. warning::
+    TODO
 
 Package Builder also provides a few useful services to check that the python
 modules follow code best practices:
@@ -85,6 +118,9 @@ modules follow code best practices:
    script.
  - 'reset_file_header': will loop through all python modules and try to rewrite
    file header to match current best practices.
+ - fmt_doc: check code documentation and format it according to given standard
+   if possible. Requires some already good documentation, just a quick fix to
+   pass from one style to another (e.g. google to numpy).
 
 
 Contributing
@@ -98,6 +134,7 @@ You can contribute to this package by:
  - implementing a new addon to add a new functionality to package structures
 
 
+.. _ltpkgbuilder: https://github.com/revesansparole/ltpkgbuilder
 .. _Python: http://python.org
 .. _Travis-CI: http://travis-ci.org/
 .. _Tox: http://testrun.org/tox/
