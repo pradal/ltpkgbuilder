@@ -69,8 +69,8 @@ pkg_cfg['license'] = dict(name="mit",
                           project="toto")
 pkg_cfg['github'] = dict(user="revesansparole",
                          project="toto")
-pkg_cfg['dist'] = dict(description="belle description",
-                       keywords="keys, words")
+pkg_cfg['pydist'] = dict(description="belle description",
+                         keywords="keys, words")
 
 with open("pkg_cfg.json", 'w') as f:
     json.dump(pkg_cfg, f)

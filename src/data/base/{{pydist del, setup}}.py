@@ -7,7 +7,7 @@
 from setuptools import setup, find_packages
 
 
-short_descr = "{{key, dist.description}}"
+short_descr = "{{key, pydist.description}}"
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
@@ -54,7 +54,7 @@ setup(
         #      'wralea': wralea_entry_points
     },
 
-    keywords='{{key, dist.keywords}}',
+    keywords='{{key, pydist.keywords}}',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
