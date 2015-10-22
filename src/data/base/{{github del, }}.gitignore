@@ -1,0 +1,11 @@
+*.py[cod]
+
+{{coverage rm,
+# coverage
+.coverage
+}}
+
+{{tox rm,
+# tox
+.tox
+}}

@@ -49,3 +49,6 @@ output/
 boilerplate/
 
 toto/
+example/wheels/
+example/venv_toto/
+example/pkg_tata/
