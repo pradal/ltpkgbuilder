@@ -25,6 +25,21 @@ from templating import same
 #     return rep
 
 
+def installed_options(pkg_cfg):
+    """ Returns a list of installed options according
+    to the package config file.
+    """
+    opts = pkg_cfg.keys()
+
+    # handle 'hash' key
+    try:
+        opts.remove("hash")
+    except ValueError:
+        pass
+
+    return opts
+
+
 namespace_txt = """
 __import__('pkg_resources').declare_namespace(__name__)
 """
@@ -57,15 +72,7 @@ def load_handlers(pkg_cfg):
      - pkg_cfg (dict of (str: dict)): package config
     """
     handlers = {}
-    installed_options = pkg_cfg.keys()
-
-    # handle 'hash' key
-    try:
-        installed_options.remove("hash")
-    except ValueError:
-        pass
-
-    for name in installed_options:
+    for name in installed_options(pkg_cfg):
         handlers[name] = same
         # find definition file
         try:

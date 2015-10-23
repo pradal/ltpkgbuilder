@@ -7,8 +7,10 @@ Use 'setup.py' for common tasks.
 import json
 from os.path import join as pj
 
-from local import load_handlers
+from local import load_handlers, installed_options
 from manage_tools import check_tempering, regenerate_dir, update_opt
+from option_tools import get_user_permission
+from versioning import get_github_version, get_local_version
 
 
 def init_pkg(rep="."):
@@ -47,9 +49,24 @@ def write_pkg_config(pkg_cfg, rep="."):
 def update_pkg(pkg_cfg):
     """ Check if a new version of ltpkgbuilder exists
     """
+    gth_ver = get_github_version()
+    loc_ver = get_local_version()
+    if gth_ver <= loc_ver:
+        print "package is up to date, nothing to do"
+    else:
+        print "newer version of package available"
+        if get_user_permission("install"):
+            print "install"
+        else:
+            return pkg_cfg
+
+        # relaunch config for each installed option
+        for opt_name in installed_options(pkg_cfg):
+            pkg_cfg = update_option(opt_name, pkg_cfg)
+
+        # regenerate will be called explicitly
+
     return pkg_cfg
-    # check new version of ltpkgbuilder
-    # check new version of each option to know if update_opt is required
 
 
 def update_option(name, pkg_cfg):

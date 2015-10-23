@@ -1,6 +1,14 @@
 from nose.tools import assert_raises
 
-from ltpkgbuilder.local import load_handlers
+from ltpkgbuilder.local import load_handlers, installed_options
+
+
+def test_installed_options_handle_hash_key():
+    cfg = {'toto': {}, 'titi': None}
+    assert set(installed_options(cfg)) == {'toto', 'titi'}
+
+    cfg['hash'] = {}
+    assert set(installed_options(cfg)) == {'toto', 'titi'}
 
 
 def test_load_handlers_fail_if_unknown_option():
