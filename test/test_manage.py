@@ -5,6 +5,7 @@ from os.path import exists
 from hashlib import sha512
 from shutil import rmtree
 
+from ltpkgbuilder.versioning import get_local_version
 from ltpkgbuilder.manage import (get_pkg_config,
                                  init_pkg,
                                  regenerate,
@@ -65,8 +66,46 @@ def test_add_already_existing_option_raises_warning():
     assert_raises(UserWarning, lambda: add_option('base', pkg_cfg))
 
 
-def test_manage_update_pkg():
-    assert not update_pkg({})  # TODO
+def test_manage_update_pkg_do_nothing_if_up_to_date():
+    pkg_cfg = update_pkg({})
+    assert len(pkg_cfg) == 0
+
+
+def test_manage_update_pkg_do_not_change_installed_options():
+    ver = get_local_version()
+    ver.version = (ver.version[0], ver.version[1] + 1, ver.version[2])
+
+    pkg_cfg = {'base': dict(pkg_fullname='toto',
+                            pkgname='toto',
+                            namespace=None,
+                            author_name='moi')}
+
+    mem = dict(pkg_cfg['base'])
+
+    with mock.patch("ltpkgbuilder.manage.get_github_version", return_value=ver):
+        with mock.patch('__builtin__.raw_input', return_value=''):
+            pkg_cfg = update_pkg(pkg_cfg)
+            assert len(pkg_cfg) == 1
+            assert pkg_cfg['base'] == mem
+
+
+def test_manage_update_pkg_requires_user_input():
+    ver = get_local_version()
+    ver.version = (ver.version[0], ver.version[1] + 1, ver.version[2])
+
+    pkg_cfg = {'base': dict(pkg_fullname='toto',
+                            pkgname='toto',
+                            namespace=None,
+                            author_name='moi')}
+
+    mem = dict(pkg_cfg['base'])
+
+    with mock.patch("ltpkgbuilder.manage.get_github_version", return_value=ver):
+        with mock.patch('__builtin__.raw_input', return_value='n'):
+            pkg_cfg['toto'] = dict(option=None)
+            pkg_cfg = update_pkg(pkg_cfg)
+            assert len(pkg_cfg) == 2
+            assert pkg_cfg['base'] == mem
 
 
 def test_manage_update_opt_raise_error_if_not_already_installed():

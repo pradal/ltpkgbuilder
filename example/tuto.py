@@ -4,6 +4,12 @@ from os import chdir, getcwd, mkdir
 from os.path import exists
 from shutil import rmtree
 from subprocess import call
+from sys import argv
+
+if len(argv) > 1:
+    install_mode = argv[1]
+else:
+    install_mode = "develop"
 
 pkg_dir = "pkg_tata"
 venv_dir = "venv_toto"
@@ -43,7 +49,7 @@ for req in reqs:
 # install ltpkgbuiler
 chdir("../..")
 
-call("python setup.py develop", shell=True)
+call("python setup.py %s" % install_mode, shell=True)
 
 # generate new package
 chdir(cwd + "/" + pkg_dir)

@@ -5,7 +5,9 @@ Use 'setup.py' for common tasks.
 """
 
 import json
+# import os
 from os.path import join as pj
+# import pip
 
 from local import load_handlers, installed_options
 from manage_tools import check_tempering, regenerate_dir, update_opt
@@ -57,6 +59,19 @@ def update_pkg(pkg_cfg):
         print "newer version of package available"
         if get_user_permission("install"):
             print "install"
+            # TODO: perform installation
+            # if get_user_permission('develop mode'):
+            #     print "update your code before continuing"
+            #     get_user_permission("continue")
+            # else:
+            #     pip_args = ['-vvv']
+            #     proxy = os.environ['http_proxy']
+            #     if proxy:
+            #         pip_args.append('--proxy')
+            #         pip_args.append(proxy)
+            #     pip_args.append('install')
+            #     pip_args.append('ltpkgbuilder')
+            #     pip.main(pip_args)
         else:
             return pkg_cfg
 

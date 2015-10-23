@@ -1,9 +1,10 @@
 from argparse import ArgumentParser
 
+from local import installed_options
 from manage import (get_pkg_config,
                     init_pkg,
                     regenerate,
-                    add_option, update_opt, update_pkg,
+                    add_option, update_option, update_pkg,
                     write_pkg_config)
 
 
@@ -25,9 +26,13 @@ def main():
         if args.option is None:
             print "update package"
             pkg_cfg = update_pkg(pkg_cfg)
+        elif args.option == 'all':
+            print "update all options"
+            for name in installed_options(pkg_cfg):
+                pkg_cfg = update_option(name, pkg_cfg)
         else:
             print "update option"
-            pkg_cfg = update_opt(args.option, pkg_cfg)
+            pkg_cfg = update_option(args.option, pkg_cfg)
         write_pkg_config(pkg_cfg)
     elif args.action == 'regenerate':
         print "regenerate"
