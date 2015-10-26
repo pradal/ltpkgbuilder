@@ -1,6 +1,10 @@
 Long Term Package Builder
 =========================
 
+.. image:: https://coveralls.io/repos/revesansparole/ltpkgbuilder/badge.svg?branch=master&service=github
+    :alt: Coverage report status
+    :target: https://coveralls.io/github/revesansparole/ltpkgbuilder?branch=master
+
 .. image:: https://travis-ci.org/revesansparole/ltpkgbuilder.svg?branch=master
     :alt: Travis build status
     :target: https://travis-ci.org/revesansparole/ltpkgbuilder
