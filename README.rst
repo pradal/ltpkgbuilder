@@ -26,6 +26,8 @@ of a python programmer as easy as possible by providing two core functions:
  - a way to keep the package structure up to date with currently known best
    practices.
 
+.. _Python: http://python.org
+
 Quick start
 -----------
 
@@ -55,6 +57,8 @@ Run 'manage' inside this directory::
 This will create the bare basic minimum for a python package. Add more options
 (see `Add Package Structure Functionality`_ for more options) afterward. Especially,
 maybe the 'base' option that will create a 'src' directory to put your code in it.
+
+.. _ltpkgbuilder: https://github.com/revesansparole/ltpkgbuilder
 
 Upgrade Package Structure
 -------------------------
@@ -114,6 +118,17 @@ already existing package:
    guidelines.
  - pypi: step by step guide and configuration to upload package on PyPi_.
 
+.. _Travis-CI: http://travis-ci.org/
+.. _Tox: http://testrun.org/tox/
+.. _Sphinx: http://sphinx-doc.org/
+.. _ReadTheDocs: https://readthedocs.org/
+.. _Github: https://github.com/
+.. _Nose: https://nose.readthedocs.org/en/latest/
+.. _coverage: https://pypi.python.org/pypi/coverage
+.. _Flake8: https://pypi.python.org/pypi/flake8
+.. _PyPi: https://pypi.python.org/pypi
+.. _PEP8: https://www.python.org/dev/peps/pep-0008/
+
 Install a new option
 ********************
 
@@ -139,6 +154,8 @@ regenerate to see the action of the new options on your package::
 
     (dvlpt)toto$ manage regenerate
 
+
+.. _lice: https://github.com/licenses/lice
 
 Install example files
 *********************
@@ -190,6 +207,7 @@ modules follow code best practices:
    if possible. Requires some already good documentation, just a quick fix to
    pass from one style to another (e.g. google to numpy).
 
+.. _plugin: openalea.plugin
 
 Contributing
 ------------
@@ -200,20 +218,3 @@ You can contribute to this package by:
  - correcting some bugs
  - closing a few issues
  - implementing a new option to add a new functionality to package structures
-
-
-.. _ltpkgbuilder: https://github.com/revesansparole/ltpkgbuilder
-.. _Python: http://python.org
-.. _Travis-CI: http://travis-ci.org/
-.. _Tox: http://testrun.org/tox/
-.. _Sphinx: http://sphinx-doc.org/
-.. _ReadTheDocs: https://readthedocs.org/
-.. _Github: https://github.com/
-.. _Nose: https://nose.readthedocs.org/en/latest/
-.. _coverage: https://pypi.python.org/pypi/coverage
-.. _Flake8: https://pypi.python.org/pypi/flake8
-.. _plugin: openalea.plugin
-.. _PyPi: https://pypi.python.org/pypi
-.. _lice: https://github.com/licenses/lice
-.. _PEP8: https://www.python.org/dev/peps/pep-0008/
-

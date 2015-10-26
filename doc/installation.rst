@@ -4,15 +4,15 @@ Installation
 
 At the command line::
 
-    $ easy_install {{ cookiecutter.pkg_fullname }}
+    $ easy_install ltpkgbuilder
 
 Or::
 
-    $ pip install {{ cookiecutter.pkg_fullname}}
+    $ pip install ltpkgbuilder
 
 Preferred method use virtual environments::
 
     $ virtualenv 'myenv'
-    $ cd 'myenv'
-    $ pip install {{ cookiecutter.pkg_fullname }}
+    $ myenv/scripts/activate
+    (myenv)$ pip install ltpkgbuilder
 
