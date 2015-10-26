@@ -8,15 +8,7 @@ pep8:
 
 autodetect: yes
 
-requirements:
-    - deps/core.txt
-    - deps/test.txt
-
 ignore-paths:
     - doc
     - example
     - src/ltpkgbuilder_data
-
-ignore-patterns:
-    - ^example/doc_.*\.py$
-    - (^|/)docs(/|$)
