@@ -11,4 +11,7 @@ python:
 install: pip install -r requirements.txt
 
 # command to run tests, e.g. python setup.py test
-script: nosetests
+script: nosetests --with-coverage --cover-package=ltpkgbuilder
+
+after_success:
+  coveralls
