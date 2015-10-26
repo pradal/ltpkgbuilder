@@ -1,17 +1,14 @@
 doc-warnings: yes
 test-warnings: no
 strictness: veryhigh
-max-line-length: 120
-uses:
-    - django
-    - celery
+max-line-length: 80
+
+pep8:
+    full: true
+
 autodetect: yes
-requirements:
-    - deps/core.txt
-    - deps/test.txt
+
 ignore-paths:
-    - docs
-    - mypackage/vendor
-ignore-patterns:
-    - ^example/doc_.*\.py$
-    - (^|/)docs(/|$)
+    - doc
+    - example
+    - src/ltpkgbuilder_data
