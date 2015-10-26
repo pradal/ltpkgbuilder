@@ -2,11 +2,17 @@
 this package data
 """
 
-from pkg_resources import (Requirement, resource_isdir,
-                           resource_listdir, resource_string)
+# from pkg_resources import (Requirement, resource_isdir,
+#                            resource_listdir, resource_string)
+#
+#
+# req = Requirement.parse('ltpkgbuilder')
 
+from os import listdir
+from os.path import dirname, isdir
+from os.path import join as pj
 
-req = Requirement.parse('ltpkgbuilder')
+pkg_root_dir = dirname(dirname(__file__))
 
 
 def get(file_name):
@@ -19,7 +25,11 @@ def get(file_name):
     return:
      - (str): content of the file red in 'r' mode
     """
-    return resource_string(req, file_name).decode("utf-8")
+    with open(pj(pkg_root_dir, file_name), 'r') as f:
+        cnt = f.read()
+
+    return cnt
+    # return resource_string(req, file_name).decode("utf-8")
 
 
 def ls(dir_name):
@@ -34,5 +44,7 @@ def ls(dir_name):
                        without any specific order, items are
                        (entity_name, is_directory)
     """
-    return [(n, resource_isdir(req, dir_name + "/" + n))
-            for n in resource_listdir(req, dir_name)]
+    return [(n, isdir(pj(pkg_root_dir, dir_name, n)))
+            for n in listdir(pj(pkg_root_dir, dir_name))]
+    # return [(n, resource_isdir(req, dir_name + "/" + n))
+    #         for n in resource_listdir(req, dir_name)]
