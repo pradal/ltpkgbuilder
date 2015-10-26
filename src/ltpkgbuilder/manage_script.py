@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 from local import installed_options
-from manage import (get_pkg_config,
+from manage import (clean, get_pkg_config,
                     init_pkg,
                     regenerate,
                     add_option, update_option, update_pkg,
@@ -21,6 +21,8 @@ def main():
     if args.action == 'init':
         print "init package"
         init_pkg()
+    elif args.action == 'clean':
+        clean()
     elif args.action == 'update':
         pkg_cfg = get_pkg_config()
         if args.option is None:

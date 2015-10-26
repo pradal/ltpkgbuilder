@@ -10,24 +10,29 @@ from .file_management import write_file
 from .templating import same
 
 
-# def src_dir(info):
-#     """ Compute name of src dir according to pkgname
-#     and namespace in info
-#     """
-#     rep = "src"
-#     namespace = info['base']['namespace']
-#     if namespace is not None:
-#         rep = rep + "/" + namespace
-#
-#     pkgname = info['base']['pkgname']
-#     rep = rep + "/" + pkgname
-#
-#     return rep
+def src_dir(pkg_cfg):
+    """ Compute name of src dir according to pkgname
+    and namespace in info
+
+    args:
+     - pkg_cfg (dict of (str: dict)): package config info
+    """
+    rep = "src"
+    namespace = pkg_cfg['base']['namespace']
+    if namespace is not None:
+        rep = rep + "/" + namespace
+
+    pkgname = pkg_cfg['base']['pkgname']
+    rep = rep + "/" + pkgname
+
+    return rep
 
 
 def installed_options(pkg_cfg):
     """ Returns a list of installed options according
     to the package config file.
+
+    TODO: sort by dependency
     """
     opts = list(pkg_cfg.keys())
 

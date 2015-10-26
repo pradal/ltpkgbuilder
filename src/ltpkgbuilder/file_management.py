@@ -28,7 +28,6 @@ def write_file(pth, content, hashmap):
      - hashmap (dict of (str: sha512)): mapping between
                  file path and hash keys
     """
-    print("WRITE", pth, repr(content))
     with open(pth, 'wb') as f:
         f.write(content.encode("utf-8"))
 
@@ -59,8 +58,6 @@ def user_modified(pth, hashmap):
     with open(pth, 'rb') as f:
         content = f.read()
         algo.update(content)
-
-    print("READ", pth, repr(content))
 
     new_hash = b64encode(algo.digest()).decode("utf-8")
     return new_hash != ref_hash

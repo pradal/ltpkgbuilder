@@ -5,9 +5,11 @@ Use 'setup.py' for common tasks.
 """
 
 import json
-# import os
+from os import remove, walk
+from os.path import splitext
 from os.path import join as pj
 # import pip
+from shutil import rmtree
 
 from .local import load_handlers, installed_options
 from .manage_tools import check_tempering, regenerate_dir, update_opt
@@ -46,6 +48,28 @@ def write_pkg_config(pkg_cfg, rep="."):
     """
     with open(pj(rep, "pkg_cfg.json"), 'w') as f:
         json.dump(pkg_cfg, f, sort_keys=True, indent=4)
+
+
+def clean(rep="."):
+    """ Thorough cleaning of all arborescence rooting at rep.
+
+    args:
+     - rep (str): default ".", top directory to clean
+    """
+    for root, dnames, fnames in walk(rep):
+        # do not walk directories starting with "."
+        for name in list(dnames):
+            if name.startswith("."):
+                dnames.remove(name)
+            if name == "__pycache__":
+                rmtree(pj(root, name))
+                dnames.remove(name)
+            if name == "venv_toto":
+                dnames.remove(name)
+
+        for name in fnames:
+            if splitext(name)[1] in [".pyc", ".pyo"]:
+                remove(pj(root, name))
 
 
 def update_pkg(pkg_cfg):

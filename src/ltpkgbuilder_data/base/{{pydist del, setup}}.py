@@ -11,24 +11,21 @@ short_descr = "{{key, pydist.description}}"
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
-requirements = open("requirements.txt").read().split("\n")
-
-test_requirements = [
-    # TODO: put package test requirements here
-]
-
-
+# {{version rm,
 # find version number in /src/$pkg_pth/version.py
 version = {}
 with open("src/$pkg_pth/version.py") as fp:
     exec(fp.read(), version)
+# }}
 
 url = '{{github rm, https://github.com/{{key, github.user}}/{{key, github.pkg_pth}}}}'
 
 
 setup(
     name='{{key, base.pkg_fullname}}',
+    # {{version rm,
     version=version["__version__"],
+    # }}
     description=short_descr,
     long_description=readme + '\n\n' + history,
     author="{{key, base.author_name}}",
@@ -45,7 +42,12 @@ setup(
     include_package_data=True,
     package_data={'': []},
     # }}
-    install_requires=requirements,
+    # {{requirements,
+    install_requires=[],
+    test_suite='test',
+    tests_require=[],
+    # }}
+    # {{plugin.setup rm,
     entry_points={
         # 'console_scripts': [
         #       'fake_script = openalea.fakepackage.amodule:console_script', ],
@@ -53,6 +55,7 @@ setup(
         #      'fake_gui = openalea.fakepackage.amodule:gui_script',],
         #      'wralea': wralea_entry_points
     },
+    # }}
 
     keywords='{{key, pydist.keywords}}',
     classifiers=[
@@ -66,7 +69,5 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
-    ],
-    test_suite='test',
-    tests_require=test_requirements
+    ]
 )
