@@ -9,6 +9,10 @@ Long Term Package Builder
     :alt: Travis build status
     :target: https://travis-ci.org/revesansparole/ltpkgbuilder
 
+.. image:: https://landscape.io/github/revesansparole/ltpkgbuilder/master/landscape.svg?style=flat
+    :alt: Code health status
+    :target: https://landscape.io/github/revesansparole/ltpkgbuilder/master
+
 At it simplest, a Python_ package is a mere directory with a '__init__.py' file
 in it. However, this basic structure needs to be augmented as soon as more
 functionality is required: i.e. create a distribution, write a comprehensive
