@@ -70,7 +70,28 @@ def create_namespace_dir(dst, namespace, pkg_cfg):
     return pth
 
 
-def load_handlers(pkg_cfg):
+def load_handlers(name):
+    """ Load handlers associated with a given option
+
+    args:
+     - name (str): name of option
+
+    return:
+     - (dict of (str: func))
+    """
+    handlers = {name: same}
+    # find definition file
+    try:
+        opt_handlers = import_module("ltpkgbuilder.option.%s.handlers" % name)
+    except ImportError:
+        raise KeyError("option '%s' does not exists" % name)
+
+    handlers.update(opt_handlers.mapping)
+
+    return handlers
+
+
+def load_all_handlers(pkg_cfg):
     """ Load handlers for installed options
 
     args:
@@ -78,13 +99,6 @@ def load_handlers(pkg_cfg):
     """
     handlers = {}
     for name in installed_options(pkg_cfg):
-        handlers[name] = same
-        # find definition file
-        try:
-            opt_handlers = import_module("ltpkgbuilder.option.%s.handlers" % name)
-        except ImportError:
-            raise KeyError("option '%s' does not exists" % name)
-
-        handlers.update(opt_handlers.mapping)
+        handlers.update(load_handlers(name))
 
     return handlers

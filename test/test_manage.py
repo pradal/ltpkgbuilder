@@ -6,7 +6,7 @@ from hashlib import sha512
 from shutil import rmtree
 
 from ltpkgbuilder.versioning import get_local_version
-from ltpkgbuilder.manage import (get_pkg_config,
+from ltpkgbuilder.manage import (clean, get_pkg_config,
                                  init_pkg,
                                  regenerate,
                                  add_option, update_option, edit_option,
@@ -59,6 +59,62 @@ def test_manage_cfg_store_any_item():
     algo = sha512()
     algo.update(("lorem ipsum\n" * 10).encode("latin1"))
     assert algo.digest() == new_cfg['hash'].encode("latin1")
+
+
+@with_setup(setup, teardown)
+def test_clean_remove_pyc_files():
+    name = tmp_dir + "/" + "toto.pyc"
+    with open(name, 'w') as f:
+        f.write("toto")
+
+    clean(tmp_dir)
+    assert not exists(name)
+
+
+@with_setup(setup, teardown)
+def test_clean_remove_pycache_directories():
+    pycache = tmp_dir + "/" + "__pycache__"
+    mkdir(pycache)
+    name = pycache + "/" + "toto.py"
+    with open(name, 'w') as f:
+        f.write("toto")
+
+    clean(tmp_dir)
+    assert not exists(pycache)
+    assert not exists(name)
+
+
+@with_setup(setup, teardown)
+def test_clean_do_not_remove_py_files():
+    name = tmp_dir + "/" + "toto.py"
+    with open(name, 'w') as f:
+        f.write("toto")
+
+    clean(tmp_dir)
+    assert exists(name)
+
+
+@with_setup(setup, teardown)
+def test_clean_do_not_remove_hidden_files():
+    name = tmp_dir + "/" + ".toto.pyc"
+    with open(name, 'w') as f:
+        f.write("toto")
+
+    clean(tmp_dir)
+    assert exists(name)
+
+
+@with_setup(setup, teardown)
+def test_clean_do_not_explore_hidden_directories():
+    hidden = tmp_dir + "/" + ".test"
+    mkdir(hidden)
+    name = hidden + "/" + "toto.py"
+    with open(name, 'w') as f:
+        f.write("toto")
+
+    clean(tmp_dir)
+    assert exists(hidden)
+    assert exists(name)
 
 
 def test_add_already_existing_option_raises_warning():

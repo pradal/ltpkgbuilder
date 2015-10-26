@@ -166,7 +166,8 @@ def update_opt(name, pkg_cfg, extra=None):
     option_cfg = opt_cfg.main(pkg_cfg, extra)
 
     # write new pkg_info file
-    pkg_cfg[name] = option_cfg
+    if option_cfg is not None:
+        pkg_cfg[name] = option_cfg
 
     try:  # TODO: proper doc to expose this feature
         opt_cfg.after(pkg_cfg)

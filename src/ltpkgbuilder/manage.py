@@ -11,7 +11,7 @@ from os.path import join as pj
 # import pip
 from shutil import rmtree
 
-from .local import load_handlers, installed_options
+from .local import load_all_handlers, installed_options
 from .manage_tools import check_tempering, regenerate_dir, update_opt
 from .option_tools import get_user_permission
 from .versioning import get_github_version, get_local_version
@@ -53,6 +53,8 @@ def write_pkg_config(pkg_cfg, rep="."):
 def clean(rep="."):
     """ Thorough cleaning of all arborescence rooting at rep.
 
+    # TODO: exception list instead of hardcoded one
+
     args:
      - rep (str): default ".", top directory to clean
     """
@@ -68,8 +70,9 @@ def clean(rep="."):
                 dnames.remove(name)
 
         for name in fnames:
-            if splitext(name)[1] in [".pyc", ".pyo"]:
-                remove(pj(root, name))
+            if not name.startswith("."):
+                if splitext(name)[1] in [".pyc", ".pyo"]:
+                    remove(pj(root, name))
 
 
 def update_pkg(pkg_cfg):
@@ -158,7 +161,7 @@ def regenerate(pkg_cfg, target="."):
      - target (str): target directory to write into
     """
     # parse options and load handlers
-    handlers = load_handlers(pkg_cfg)
+    handlers = load_all_handlers(pkg_cfg)
 
     # walk all files in repo to check for possible tempering
     # of files by user

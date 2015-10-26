@@ -1,6 +1,6 @@
 from importlib import import_module
 
-from ltpkgbuilder.local import installed_options
+from ltpkgbuilder.local import installed_options, src_dir
 
 
 def requirements(txt, env):
@@ -19,4 +19,9 @@ def requirements(txt, env):
     return "install_requires=[%s]," % reqs_str
 
 
-mapping = {"requirements": requirements}
+def get_src_pth(txt, env):
+    return src_dir(env)
+
+
+mapping = {"requirements": requirements,
+           "src_pth": get_src_pth}

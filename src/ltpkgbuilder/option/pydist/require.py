@@ -1,3 +1,3 @@
-option = ['base', 'test', 'doc', 'license']
+option = ['base', 'test', 'doc', 'license', 'version']
 setup = []
 install = []

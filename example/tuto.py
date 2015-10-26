@@ -91,6 +91,10 @@ with open("pkg_cfg.json", 'w') as f:
 
 call("manage regenerate")
 
+call("manage add -opt example -e option_name plugin")
+
+call("manage regenerate")
+
 # call("manage add -opt test")
 # call("manage add -opt doc")
 #

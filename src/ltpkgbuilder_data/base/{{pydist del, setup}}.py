@@ -14,7 +14,7 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 # {{version rm,
 # find version number in /src/$pkg_pth/version.py
 version = {}
-with open("src/$pkg_pth/version.py") as fp:
+with open("{{src_pth, }}/version.py") as fp:
     exec(fp.read(), version)
 # }}
 

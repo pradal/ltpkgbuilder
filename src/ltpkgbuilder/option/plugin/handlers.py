@@ -71,16 +71,30 @@ def setup(txt, env):
     pkg_dir = src_dir(env)
     print getcwd(), pkg_dir
 
+    entry_points = {}
+
     for root, dnames, fnames in walk(pkg_dir):
         for name in fnames:
             if splitext(name)[1] == ".py":
                 print "Xplo", name
                 plugins = discover_plugin(abspath(root), name)
                 for p_name, p_gr in plugins:
-                    p_def = get_definition_id(pkg_dir, root + "/" + name, p_name)
-                    print p_def
+                    p_def = get_definition_id(pkg_dir, root + "/" + name,
+                                              p_name)
+                    if p_gr not in entry_points:
+                        entry_points[p_gr] = []
 
-    return txt
+                    entry_points[p_gr].append(p_def)
+
+    entry_points_str = "entry_points={\n"
+    for gr, pgs in entry_points.items():
+        entry_points_str += " " * 8 + "'%s': [\n" % gr
+        for plugin in pgs:
+            name = plugin.split(":")[-1]
+            entry_points_str += " " * 12 + "'%s = %s',\n" % (name, plugin)
+        entry_points_str += " " * 8 + "],\n"
+    entry_points_str += " " * 4 + "},"
+    return entry_points_str
 
 
 mapping = {"plugin.setup": setup}

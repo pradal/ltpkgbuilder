@@ -17,7 +17,7 @@ def get_revision(txt):
     return None
 
 
-def write_file(pth, content, hashmap):
+def write_file(pth, content, hashmap=None):
     """ Write the content of a file on a local path and
     register associated hash for further modification
     tests.
@@ -26,14 +26,16 @@ def write_file(pth, content, hashmap):
      - pth (str): path to the new created file
      - content (str): content to write on disk
      - hashmap (dict of (str: sha512)): mapping between
-                 file path and hash keys
+                 file path and hash keys. If None, simply
+                 write file on disk.
     """
     with open(pth, 'wb') as f:
         f.write(content.encode("utf-8"))
 
-    algo = sha512()
-    algo.update(content.encode("utf-8"))
-    hashmap[pth] = b64encode(algo.digest()).decode("utf-8")
+    if hashmap is not None:
+        algo = sha512()
+        algo.update(content.encode("utf-8"))
+        hashmap[pth] = b64encode(algo.digest()).decode("utf-8")
 
 
 def user_modified(pth, hashmap):

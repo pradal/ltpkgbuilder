@@ -14,9 +14,17 @@ def main():
                         help="action to perform on package")
 
     parser.add_argument('-opt', '--option', metavar='option_name',
-                        help="argument for action=add")
+                        help="argument for action=add", dest='option')
+
+    parser.add_argument('-e', metavar='extra', nargs=2, action='append',
+                        help='extra arguments to pass to the action',
+                        dest='extra')
 
     args = parser.parse_args()
+    if args.extra is None:
+        extra = {}
+    else:
+        extra = dict(args.extra)
 
     if args.action == 'init':
         print "init package"
@@ -43,7 +51,7 @@ def main():
         write_pkg_config(pkg_cfg)
     elif args.action == 'add':
         pkg_cfg = get_pkg_config()
-        pkg_cfg = add_option(args.option, pkg_cfg)
+        pkg_cfg = add_option(args.option, pkg_cfg, extra)
         write_pkg_config(pkg_cfg)
     else:
         print "unknown"
