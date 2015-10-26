@@ -4,6 +4,7 @@ from os.path import exists
 
 from ltpkgbuilder.file_management import write_file, user_modified
 
+print(__file__)
 
 ex_file = 'toto.txt'
 

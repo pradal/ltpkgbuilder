@@ -2,6 +2,8 @@ from nose.tools import assert_raises
 
 from ltpkgbuilder.file_management import get_revision
 
+print(__file__)
+
 
 def test_revision_return_none_if_no_rev():
     txt = """

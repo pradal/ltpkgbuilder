@@ -14,6 +14,9 @@ from ltpkgbuilder.manage import (clean, get_pkg_config,
                                  write_pkg_config)
 
 
+print(__file__)
+
+
 tmp_dir = 'toto_local'
 
 
@@ -139,7 +142,7 @@ def test_manage_update_pkg_do_not_change_installed_options():
     mem = dict(pkg_cfg['base'])
 
     with mock.patch("ltpkgbuilder.manage.get_github_version", return_value=ver):
-        with mock.patch('ltpkgbuilder.option_tools.input', return_value=''):
+        with mock.patch('ltpkgbuilder.option_tools.loc_input', return_value=''):
             pkg_cfg = update_pkg(pkg_cfg)
             assert len(pkg_cfg) == 1
             assert pkg_cfg['base'] == mem
@@ -157,7 +160,7 @@ def test_manage_update_pkg_requires_user_input():
     mem = dict(pkg_cfg['base'])
 
     with mock.patch("ltpkgbuilder.manage.get_github_version", return_value=ver):
-        with mock.patch('ltpkgbuilder.option_tools.input', return_value='n'):
+        with mock.patch('ltpkgbuilder.option_tools.loc_input', return_value='n'):
             pkg_cfg['toto'] = dict(option=None)
             pkg_cfg = update_pkg(pkg_cfg)
             assert len(pkg_cfg) == 2
@@ -188,7 +191,7 @@ def test_manage_edit_opt_with_defaults_do_not_change_anything():
     pkg_cfg = add_option('base', pkg_cfg, {"pkg_fullname": 'toto'})
 
     mem = dict(pkg_cfg['base'])
-    with mock.patch('ltpkgbuilder.option_tools.input', return_value=''):
+    with mock.patch('ltpkgbuilder.option_tools.loc_input', return_value=''):
         pkg_cfg = edit_option('base', pkg_cfg)
         assert mem == pkg_cfg['base']
 

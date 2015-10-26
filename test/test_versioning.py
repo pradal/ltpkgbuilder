@@ -1,6 +1,9 @@
 from ltpkgbuilder.versioning import get_github_version, get_local_version
 
 
+print(__file__)
+
+
 # TODO: bad tests requires internet connection
 def test_get_github_version_returns_some_version_scheme():
     v = get_github_version()

@@ -1,6 +1,9 @@
 from ltpkgbuilder.templating import replace
 
 
+print(__file__)
+
+
 def upper(txt, env):
     return txt.upper()
 

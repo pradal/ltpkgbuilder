@@ -7,6 +7,9 @@ from ltpkgbuilder.manage_tools import check_tempering, regenerate_dir
 from ltpkgbuilder.templating import same
 
 
+print(__file__)
+
+
 tmp_dir = "tchikiboum"
 
 

@@ -3,6 +3,9 @@ from nose.tools import assert_raises
 from ltpkgbuilder.manage_tools import update_opt
 
 
+print(__file__)
+
+
 def test_non_existing_option_raises_warning():
     assert_raises(KeyError, lambda: update_opt('toto', {}))
 

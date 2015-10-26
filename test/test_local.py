@@ -4,6 +4,9 @@ from ltpkgbuilder.local import (load_handlers, load_all_handlers,
                                 installed_options, src_dir)
 
 
+print(__file__)
+
+
 def test_src_dir():
     pkg_cfg = {}
     assert_raises(KeyError, lambda: src_dir(pkg_cfg))
