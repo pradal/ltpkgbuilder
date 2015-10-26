@@ -138,16 +138,16 @@ directive::
 
 You will be prompted for the name of the option of the files you want to install.
 
+The files will be directly installed without the need to a regenerate call. They
+have a special status in the sense that you can modify or even remove these files
+without any complains next time you rebuild the package. You can also reinstall
+them at any time (you'll be prompted for action if conflicts occur).
+
 .. note:: If you want to avoid the interactive prompt you can use the extra args
           syntax. For example to add the example files associated with the base
           option::
 
           (dvlpt)toto$ manage add -opt example -e option_name base
-
-The files will be directly installed without the need to a regenerate call. They
-have a special status in the sense that you can modify or even remove these files
-without any complains next time you rebuild the package. You can also reinstall
-them at any time (you'll be prompted for action if conflicts occur).
 
 Edit an option
 **************
