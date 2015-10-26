@@ -36,22 +36,20 @@ Create a directory for your package::
 Run 'manage' inside this directory::
 
     (dvlpt)$ cd toto
-    (dvlpt)$ manage init
-    (dvlpt)$ manage add -opt base
-    (dvlpt)$ manage regenerate
+    (dvlpt)toto$ manage init
+    (dvlpt)toto$ manage add -opt base
+    (dvlpt)toto$ manage regenerate
 
 This will create the bare basic minimum for a python package. Add more options
-(see `Add Package Structure Functionality`_ for more options) afterward.
-
-Default minimalistic package comes with just a 'src' directory to put your code
-in it :)
+(see `Add Package Structure Functionality`_ for more options) afterward. Especially,
+maybe the 'base' option that will create a 'src' directory to put your code in it.
 
 Upgrade Package Structure
 -------------------------
 
 Packages generated with Package Builder contains three different types of files:
 
- - 'pkg_cfg.json', a resource file that contains information entered by developers
+ - 'pkg_cfg.json', a resource file that contains the information you entered
    at some stage during the configuration phase of adding an option.
  - generated files, susceptible to be regenerated at any time or with version
    change and not meant to be modified by user. These files are generated
@@ -62,51 +60,109 @@ Packages generated with Package Builder contains three different types of files:
    added option, the user will be prompted and will have to solve the conflict
    to install the option.
 
-A call to the 'update' command will check for new versions of each structure
-file, fetch the new template and instantiate it with the local meta info stored
-in the package. If new meta info are required, the developer will be prompted
-during the update. None of the files edited by the developer will be modified::
+A call to the 'update' command will check for new versions of the package or any
+available option::
 
-    (dvlpt)$ manage update
+    (dvlpt)toto$ manage update
 
 This command requires an internet connection since local installation will be
 compared to current code on github.
 
+If a newer version exists, you will be prompted for installation. After a successful
+installation you will be prompted for new arguments if the configuration of one
+of your installed options was upgraded in the process.
+
 If update is successful, a call to regenerate is mandatory to rebuilt the package
 structural files::
 
-    (dvlpt)$ manage regenerate
+    (dvlpt)toto$ manage regenerate
 
-This phase will never overwrite files modified or created by user. In case of
-conflicts it is the responsibility of the user to solve them and relaunch the
+This phase will never overwrite any files you modified or created. You'll be prompted
+in case of conflicts but it is your responsibility to solve them and relaunch the
 command.
 
 Add Package Structure Functionality
 -----------------------------------
 
-Package Builder provide a set of addons to introduce new functionality to an
+Package Builder provide a set of options to introduce new functionality to an
 already existing package:
 
  - license: will help the developer to choose a license and add the relevant
    files
  - doc: Add some documentation to your package
- - test: basic unitests using nose
+ - test: basic unitests using Nose_
+ - coverage: add code coverage_ to the basic test configuration
  - pydist: make your package distributable with setuptools (i.e. setup.py)
  - data: will guide through all the steps to add non python files to a package
  - github: will guide through all the step to safely store the package on Github_
- - tox: defines config files to use multi environment testing, Tox_
+ - readthedocs: step by step guide to have your documentation on ReadTheDocs_
  - travis: will guide through all the steps to compile the code on Travis-CI_
- - coverage: add code coverage_ to the basic test configuration
- - lint: install and config tools to check for code compliance to python Flake8_
+ - tox: defines config files to use multi environment testing, Tox_
+ - flake8: install and config Flake8_ tools to check for code compliance to PEP8_
    guidelines.
  - pypi: step by step guide and configuration to upload package on PyPi_.
- - readthedocs: step by step guide to have your documentation on ReadTheDocs_
+
+Install a new option
+********************
+
+To install a new option call the 'add' action::
+
+    (dvlpt)toto$ manage add -opt license
+
+The script will perform different tasks sequentially:
+
+ - Check if this option requires other options in order to be installed:
+   e.g. the 'pydist' option requires all 'base, 'doc', 'test', 'license' and 'version'
+   in order to run properly.
+ - Check if this option requires some extra packages in order to setup:
+   e.g. the 'license' option depends on the lice_ package to function properly.
+ - Run a basic config script to ask you for specific details relative to this option
+   e.g. the 'license' option will ask for the license name.
+
+
+.. note:: Nothing will be installed without your consent
+
+Multiple call to add options can be serialized but you explicitly needs to call
+regenerate to see the action of the new options on your package::
+
+    (dvlpt)toto$ manage regenerate
+
+
+Install example files
+*********************
+
+Each option comes with some example files that can be installed with the special
+directive::
+
+    (dvlpt)toto$ manage add -opt example
+
+You will be prompted for the name of the option of the files you want to install.
+
+.. note:: If you want to avoid the interactive prompt you can use the extra args
+          syntax. For example to add the example files associated with the base
+          option::
+
+          (dvlpt)toto$ manage add -opt example -e option_name base
+
+The files will be directly installed without the need to a regenerate call. They
+have a special status in the sense that you can modify or even remove these files
+without any complains next time you rebuild the package. You can also reinstall
+them at any time (you'll be prompted for action if conflicts occur).
+
+Edit an option
+**************
+
+You can simply edit an option (e.g. license) by running the command::
+
+    (dvlpt)toto$ manage edit -opt license
+
+You'll be re-prompted for the values of arguments of this option with default to
+previously entered values.
 
 Extra services
 --------------
 
-.. warning::
-    TODO
+.. warning:: TODO
 
 Package Builder also provides a few useful services to check that the python
 modules follow code best practices:
@@ -131,7 +187,7 @@ You can contribute to this package by:
  - improving the documentation
  - correcting some bugs
  - closing a few issues
- - implementing a new addon to add a new functionality to package structures
+ - implementing a new option to add a new functionality to package structures
 
 
 .. _ltpkgbuilder: https://github.com/revesansparole/ltpkgbuilder
@@ -141,11 +197,11 @@ You can contribute to this package by:
 .. _Sphinx: http://sphinx-doc.org/
 .. _ReadTheDocs: https://readthedocs.org/
 .. _Github: https://github.com/
-.. _Nose:
-.. _coverage:
-.. _openalea:
-.. _zope:
-.. _Flake8:
+.. _Nose: https://nose.readthedocs.org/en/latest/
+.. _coverage: https://pypi.python.org/pypi/coverage
+.. _Flake8: https://pypi.python.org/pypi/flake8
 .. _plugin: openalea.plugin
-.. _PyPi:
+.. _PyPi: https://pypi.python.org/pypi
+.. _lice: https://github.com/licenses/lice
+.. _PEP8: https://www.python.org/dev/peps/pep-0008/
 
