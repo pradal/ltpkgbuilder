@@ -49,8 +49,8 @@ def copy_dir(cur_src_pth, cur_dst_pth, handlers, pkg_cfg):
                              pkg_cfg)
         else:
             new_name = replace(name, handlers, pkg_cfg)
-            if (new_name.split(".")[0] != "_"
-                  and new_name[-3:] not in ("pyc", "pyo")):
+            if (new_name.split(".")[0] != "_" and
+                  new_name[-3:] not in ("pyc", "pyo")):
                 src_content = get(cur_src_pth + "/" + name)
                 new_src_content = replace(src_content, handlers, pkg_cfg)
                 # overwrite file without any warning

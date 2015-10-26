@@ -86,15 +86,16 @@ def setup(txt, env):
 
                     entry_points[p_gr].append(p_def)
 
-    entry_points_str = "entry_points={\n"
+    entry_points_msg = ["entry_points={"]
     for gr, pgs in entry_points.items():
-        entry_points_str += " " * 8 + "'%s': [\n" % gr
+        entry_points_msg.append(" " * 8 + "'%s': [" % gr)
         for plugin in pgs:
             name = plugin.split(":")[-1]
-            entry_points_str += " " * 12 + "'%s = %s',\n" % (name, plugin)
-        entry_points_str += " " * 8 + "],\n"
-    entry_points_str += " " * 4 + "},"
-    return entry_points_str
+            entry_points_msg.append(" " * 12 + "'%s = %s'," % (name, plugin))
+        entry_points_msg.append(" " * 8 + "],")
+    entry_points_msg.append(" " * 4 + "},")
+
+    return "\n".join(entry_points_msg)
 
 
 mapping = {"plugin.setup": setup}
