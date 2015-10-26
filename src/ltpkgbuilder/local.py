@@ -6,8 +6,8 @@ from importlib import import_module
 from os import mkdir
 from os.path import exists
 
-from file_management import write_file
-from templating import same
+from .file_management import write_file
+from .templating import same
 
 
 # def src_dir(info):
@@ -29,7 +29,7 @@ def installed_options(pkg_cfg):
     """ Returns a list of installed options according
     to the package config file.
     """
-    opts = pkg_cfg.keys()
+    opts = list(pkg_cfg.keys())
 
     # handle 'hash' key
     try:

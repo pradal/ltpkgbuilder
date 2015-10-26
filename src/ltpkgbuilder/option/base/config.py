@@ -41,4 +41,4 @@ def main(pkg_cfg, extra):
 
 
 def after(pkg_cfg):
-    print "base: after main config"
+    print("base: after main config")

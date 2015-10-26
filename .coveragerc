@@ -1,2 +1,7 @@
 [html]
 title = Long Term Package Builder's coverage
+directory = htmlcov
+
+
+# [run]
+# include = ltpkgbuilder

@@ -9,10 +9,10 @@ import json
 from os.path import join as pj
 # import pip
 
-from local import load_handlers, installed_options
-from manage_tools import check_tempering, regenerate_dir, update_opt
-from option_tools import get_user_permission
-from versioning import get_github_version, get_local_version
+from .local import load_handlers, installed_options
+from .manage_tools import check_tempering, regenerate_dir, update_opt
+from .option_tools import get_user_permission
+from .versioning import get_github_version, get_local_version
 
 
 def init_pkg(rep="."):
@@ -31,7 +31,7 @@ def get_pkg_config(rep="."):
     return:
      - (dict of (str, dict)): option_name: options
     """
-    with open(pj(rep, "pkg_cfg.json"), 'rb') as f:
+    with open(pj(rep, "pkg_cfg.json"), 'r') as f:
         info = json.load(f)
 
     return info
@@ -44,7 +44,7 @@ def write_pkg_config(pkg_cfg, rep="."):
      - pkg_cfg (dict of (str, dict)): option_name, options
      - rep (str): directory to search for info
     """
-    with open(pj(rep, "pkg_cfg.json"), 'wb') as f:
+    with open(pj(rep, "pkg_cfg.json"), 'w') as f:
         json.dump(pkg_cfg, f, sort_keys=True, indent=4)
 
 
@@ -54,14 +54,14 @@ def update_pkg(pkg_cfg):
     gth_ver = get_github_version()
     loc_ver = get_local_version()
     if gth_ver <= loc_ver:
-        print "package is up to date, nothing to do"
+        print("package is up to date, nothing to do")
     else:
-        print "newer version of package available"
+        print("newer version of package available")
         if get_user_permission("install"):
-            print "install"
+            print("install")
             # TODO: perform installation
             # if get_user_permission('develop mode'):
-            #     print "update your code before continuing"
+            #     print("update your code before continuing")
             #     get_user_permission("continue")
             # else:
             #     pip_args = ['-vvv']
@@ -139,11 +139,11 @@ def regenerate(pkg_cfg, target="."):
     # walk all files in repo to check for possible tempering
     # of files by user
     tf = []
-    check_tempering("data/base", target, handlers, pkg_cfg, tf)
+    check_tempering("ltpkgbuilder_data/base", target, handlers, pkg_cfg, tf)
     if len(tf) > 0:
         msg = "These files have been modified by user:\n"
         msg += "\n".join(tf)
         raise UserWarning(msg)
 
     # walk all files in repo and regenerate them
-    regenerate_dir("data/base", target, handlers, pkg_cfg)
+    regenerate_dir("ltpkgbuilder_data/base", target, handlers, pkg_cfg)

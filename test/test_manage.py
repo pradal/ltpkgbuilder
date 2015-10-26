@@ -45,7 +45,7 @@ def test_manage_pkg_config():
 @with_setup(setup, teardown)
 def test_manage_cfg_store_any_item():
     algo = sha512()
-    algo.update("lorem ipsum\n" * 10)
+    algo.update(("lorem ipsum\n" * 10).encode("latin1"))
 
     cfg = dict(simple=1,
                txt="lorem ipsum\n" * 4,
@@ -57,7 +57,7 @@ def test_manage_cfg_store_any_item():
     assert new_cfg == cfg
 
     algo = sha512()
-    algo.update("lorem ipsum\n" * 10)
+    algo.update(("lorem ipsum\n" * 10).encode("latin1"))
     assert algo.digest() == new_cfg['hash'].encode("latin1")
 
 
@@ -83,7 +83,7 @@ def test_manage_update_pkg_do_not_change_installed_options():
     mem = dict(pkg_cfg['base'])
 
     with mock.patch("ltpkgbuilder.manage.get_github_version", return_value=ver):
-        with mock.patch('__builtin__.raw_input', return_value=''):
+        with mock.patch('ltpkgbuilder.option_tools.input', return_value=''):
             pkg_cfg = update_pkg(pkg_cfg)
             assert len(pkg_cfg) == 1
             assert pkg_cfg['base'] == mem
@@ -101,7 +101,7 @@ def test_manage_update_pkg_requires_user_input():
     mem = dict(pkg_cfg['base'])
 
     with mock.patch("ltpkgbuilder.manage.get_github_version", return_value=ver):
-        with mock.patch('__builtin__.raw_input', return_value='n'):
+        with mock.patch('ltpkgbuilder.option_tools.input', return_value='n'):
             pkg_cfg['toto'] = dict(option=None)
             pkg_cfg = update_pkg(pkg_cfg)
             assert len(pkg_cfg) == 2
@@ -132,7 +132,7 @@ def test_manage_edit_opt_with_defaults_do_not_change_anything():
     pkg_cfg = add_option('base', pkg_cfg, {"pkg_fullname": 'toto'})
 
     mem = dict(pkg_cfg['base'])
-    with mock.patch('__builtin__.raw_input', return_value=''):
+    with mock.patch('ltpkgbuilder.option_tools.input', return_value=''):
         pkg_cfg = edit_option('base', pkg_cfg)
         assert mem == pkg_cfg['base']
 

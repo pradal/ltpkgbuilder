@@ -5,6 +5,7 @@ include LICENSE
 include README.rst
 include requirements.txt
 
+recursive-include src/ltpkgbuilder_data *
 recursive-include test *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]

@@ -6,11 +6,11 @@ from os import mkdir
 from os.path import basename, exists
 import pip
 
-from file_management import user_modified, write_file
-from local import create_namespace_dir
-from option_tools import get_user_permission
-from rmtfile import get, ls
-from templating import replace
+from .file_management import user_modified, write_file
+from .local import create_namespace_dir
+from .option_tools import get_user_permission
+from .rmtfile import get, ls
+from .templating import replace
 
 
 def check_tempering(cur_src_pth, cur_dst_pth, handlers, pkg_cfg, tf):
@@ -50,7 +50,7 @@ def check_tempering(cur_src_pth, cur_dst_pth, handlers, pkg_cfg, tf):
             if new_name not in ("", "_"):
                 dst_dir = cur_dst_pth + "/" + new_name
                 if not exists(dst_dir):
-                    print "Directory '%s' has been removed" % dst_dir
+                    print("Directory '%s' has been removed" % dst_dir)
                 else:
                     check_tempering(cur_src_pth + "/" + name,
                                     dst_dir,
@@ -62,7 +62,7 @@ def check_tempering(cur_src_pth, cur_dst_pth, handlers, pkg_cfg, tf):
             if new_name.split(".")[0] != "_":
                 pth = cur_dst_pth + "/" + new_name
                 if user_modified(pth, pkg_cfg['hash']):
-                    print "user modified file: %s" % pth
+                    print("user modified file: %s" % pth)
                     tf.append(pth)
 
 
@@ -144,7 +144,7 @@ def update_opt(name, pkg_cfg, extra=None):
     # find other option requirements in repository
     for option_name in opt_require.option:
         if option_name not in pkg_cfg:
-            print "need to install option '%s' first" % option_name
+            print("need to install option '%s' first" % option_name)
             if (extra.get("install_option_dependencies", False) or
                         get_user_permission("install")):
                 pkg_cfg = update_opt(option_name, pkg_cfg, extra)
@@ -155,8 +155,8 @@ def update_opt(name, pkg_cfg, extra=None):
     installed = set(p.project_name for p in pip.get_installed_distributions())
     to_install = [n for n in opt_require.setup if n not in installed]
     if len(to_install) > 0:
-        print "this option requires additional packages to setup:"
-        print ", ".join(to_install)
+        print("this option requires additional packages to setup:")
+        print(", ".join(to_install))
         if get_user_permission("install"):
             pip.main(['install'] + to_install)
         else:

@@ -25,7 +25,7 @@ def test_regenerate_walk_files_in_ltpkgbuilder_data():
     pkg_cfg = {'hash': {}}
     handlers = {}
 
-    regenerate_dir("data/test/test1", tmp_dir, handlers, pkg_cfg)
+    regenerate_dir("ltpkgbuilder_data/test/test1", tmp_dir, handlers, pkg_cfg)
 
     ref_fnames = {"titi.txt", "tutu.txt", "subtest"}
 
@@ -34,7 +34,6 @@ def test_regenerate_walk_files_in_ltpkgbuilder_data():
         crt_fnames.update(ds)
         crt_fnames.update(fs)
 
-    print crt_fnames
     assert ref_fnames == crt_fnames
 
 
@@ -43,7 +42,7 @@ def test_regenerate_walk_files_except_pyc():
     pkg_cfg = {'hash': {}}
     handlers = {}
 
-    regenerate_dir("data/test/test3", tmp_dir, handlers, pkg_cfg)
+    regenerate_dir("ltpkgbuilder_data/test/test3", tmp_dir, handlers, pkg_cfg)
 
     ref_fnames = {"titi.txt", "tutu.txt", "subtest"}
 
@@ -52,7 +51,6 @@ def test_regenerate_walk_files_except_pyc():
         crt_fnames.update(ds)
         crt_fnames.update(fs)
 
-    print crt_fnames
     assert ref_fnames == crt_fnames
 
 
@@ -61,7 +59,7 @@ def test_regenerate_replace_directory_names():
     pkg_cfg = {'hash': {}}
     handlers = {}
 
-    regenerate_dir("data/test", tmp_dir, handlers, pkg_cfg)
+    regenerate_dir("ltpkgbuilder_data/test", tmp_dir, handlers, pkg_cfg)
 
     assert not exists(tmp_dir + "/{{rm, tok}}tok")
     assert exists(tmp_dir + "/tok")
@@ -74,7 +72,7 @@ def test_regenerate_do_not_create_directory_with_empty_name():
     pkg_cfg = {'hash': {}}
     handlers = {}
 
-    regenerate_dir("data/test", tmp_dir, handlers, pkg_cfg)
+    regenerate_dir("ltpkgbuilder_data/test", tmp_dir, handlers, pkg_cfg)
 
     assert not exists(tmp_dir + "/{{rm, tak}}")
     assert not exists(tmp_dir + "/tak")
@@ -85,7 +83,7 @@ def test_regenerate_replace_file_names():
     pkg_cfg = {'hash': {}}
     handlers = {'doc': same}
 
-    regenerate_dir("data/test", tmp_dir, handlers, pkg_cfg)
+    regenerate_dir("ltpkgbuilder_data/test", tmp_dir, handlers, pkg_cfg)
 
     assert not exists(tmp_dir + "/{{rm, ta}}ta.txt")
     assert not exists(tmp_dir + "/tata.txt")
@@ -97,7 +95,7 @@ def test_regenerate_do_not_create_file_with_empty_name():
     pkg_cfg = {'hash': {}}
     handlers = {'doc': same}
 
-    regenerate_dir("data/test", tmp_dir, handlers, pkg_cfg)
+    regenerate_dir("ltpkgbuilder_data/test", tmp_dir, handlers, pkg_cfg)
 
     assert not exists(tmp_dir + "/tok/{{del, toto.txt}}")
     assert not exists(tmp_dir + "/tok/toto.txt")
@@ -111,7 +109,7 @@ def test_regenerate_replace_file_content():
     pkg_cfg = {'hash': {}}
     handlers = {'upper': lambda s, env: s.upper()}
 
-    regenerate_dir("data/test", tmp_dir, handlers, pkg_cfg)
+    regenerate_dir("ltpkgbuilder_data/test", tmp_dir, handlers, pkg_cfg)
 
     assert exists(tmp_dir + "/tutu.txt")
     with open(tmp_dir + "/tutu.txt", 'r') as f:
@@ -124,7 +122,7 @@ def test_regenerate_handle_src_directory_no_namespace():
     pkg_cfg = {'hash': {}, 'base': {'namespace': None, 'pkgname': 'mypkg'}}
     handlers = {'base': same}
 
-    regenerate_dir("data/test", tmp_dir, handlers, pkg_cfg)
+    regenerate_dir("ltpkgbuilder_data/test", tmp_dir, handlers, pkg_cfg)
 
     assert exists(tmp_dir + "/src")
     assert exists(tmp_dir + "/src/mypkg")
@@ -135,7 +133,7 @@ def test_regenerate_handle_src_directory_with_namespace():
     pkg_cfg = {'hash': {}, 'base': {'namespace': 'myns', 'pkgname': 'mypkg'}}
     handlers = {'base': same}
 
-    regenerate_dir("data/test", tmp_dir, handlers, pkg_cfg)
+    regenerate_dir("ltpkgbuilder_data/test", tmp_dir, handlers, pkg_cfg)
 
     assert exists(tmp_dir + "/src")
     assert exists(tmp_dir + "/src/myns")

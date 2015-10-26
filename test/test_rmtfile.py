@@ -2,12 +2,9 @@ from ltpkgbuilder.rmtfile import get, ls
 
 
 def test_rmtfile_ls():
-    assert set(ls('data')) == {('base', True),
-                               ('example', True),
-                               ('test', True),
-                               ('__init__.py', False),
-                               ('__init__.pyc', False)}  # Bof, system dependent
+    assert set(ls('ltpkgbuilder_data/test/test1')) == {('subtest', True),
+                                          ('titi.txt', False)}
 
 
 def test_rmtfile_get():
-    assert get('data/test/toto.txt').rstrip() == "lorem ipsum"
+    assert get('ltpkgbuilder_data/test/toto.txt').rstrip() == "lorem ipsum"

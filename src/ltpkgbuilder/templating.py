@@ -90,7 +90,8 @@ def get_handler(key, handlers):
     """ Return an instance of a handler
     handler(txt, env) -> modified txt
     """
-    all_hands = dict(loc_handlers.items() + handlers.items())
+    all_hands = dict(loc_handlers)
+    all_hands.update(handlers)
     for k in key.split(" "):
         if k in all_hands:
             return all_hands[k]
@@ -116,7 +117,7 @@ def div_replace(parent, handlers, env):
         if node.typ == 'txt':
             node_txt = "".join(node.data)
             # print "node txt", node_txt
-            if node_txt > 0:
+            if len(node_txt) > 0:
                 # check for '#' character before the end
                 test_txt = node_txt.rstrip()
                 if len(test_txt) > 0 and test_txt[-1] == '#':

@@ -19,7 +19,7 @@ def get(file_name):
     return:
      - (str): content of the file red in 'r' mode
     """
-    return resource_string(req, file_name)
+    return resource_string(req, file_name).decode("utf-8")
 
 
 def ls(dir_name):

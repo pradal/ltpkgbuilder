@@ -1,5 +1,8 @@
 from distutils.version import StrictVersion
-from urllib2 import urlopen
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
 
 github_url = "https://raw.githubusercontent.com/revesansparole/ltpkgbuilder/master/src/ltpkgbuilder/version.py"
 

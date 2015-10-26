@@ -28,17 +28,32 @@ url = 'https://github.com/revesansparole/ltpkgbuilder'
 data_files = []
 
 
+# def rel_pth(pth):
+#     return pth[4:]
+#
+#
+# def fetch_data_files(cur_dir):
+#     data_files.append((rel_pth(cur_dir), glob("%s/*.*" % cur_dir)))
+#
+#     for dname in glob("%s/*/" % cur_dir):
+#         fetch_data_files(dirname(dname))
+
+base_pth = "src/ltpkgbuilder_data/"
+
+
 def rel_pth(pth):
-    return pth[4:]
+    return pth[len(base_pth):]
 
 
 def fetch_data_files(cur_dir):
-    data_files.append((rel_pth(cur_dir), glob("%s/*.*" % cur_dir)))
+    data_files.extend(rel_pth(n) for n in glob("%s/*.*" % cur_dir))
 
     for dname in glob("%s/*/" % cur_dir):
         fetch_data_files(dirname(dname))
 
-fetch_data_files('src/data')
+for dname in ("base", "example", "test"):
+    fetch_data_files(base_pth + dname)
+
 
 setup(
     name='ltpkgbuilder',
@@ -54,8 +69,8 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     include_package_data=True,
-    package_data={'data': ['data']},
-    data_files=data_files,
+    package_data={'ltpkgbuilder_data': data_files},
+    # data_files=data_files,
 
     install_requires=requirements,
     entry_points={

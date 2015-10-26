@@ -1,9 +1,13 @@
 """ Some helpers for options
 """
+try:
+    input = raw_input
+except NameError:
+    pass
 
 
 def get_user_permission(action_name):
-    return raw_input("%s [y], n?" % action_name) in ("", "y")
+    return input("%s [y], n?" % action_name) in ("", "y")
 
 
 def get_key(key, env):
@@ -69,7 +73,7 @@ def ask_arg(name, pkg_cfg=None, default=None, extra=None):
         val = str(val)
         msg += " [%s]:" % val
 
-    ans = raw_input(msg)
+    ans = input(msg)
     if ans == "":
         return val
     else:
