@@ -155,4 +155,3 @@ def replace(txt, handlers, env):
     root = parse(txt)
     txt = div_replace(root, handlers, env)
     return txt
-

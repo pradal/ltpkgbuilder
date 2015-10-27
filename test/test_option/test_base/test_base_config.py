@@ -18,13 +18,6 @@ def test_base_config_handle_namespace():
 
 
 def test_base_config_check_pkg_names():
-    assert_raises(UserWarning, lambda: main({}, {'pkg_fullname': '1mypkg'}))
-    assert_raises(UserWarning, lambda: main({}, {'pkg_fullname': ' mypkg'}))
-    assert_raises(UserWarning, lambda: main({}, {'pkg_fullname': '1'}))
-
-    assert_raises(UserWarning, lambda: main({}, {'pkg_fullname': '1.mypkg'}))
-    assert_raises(UserWarning, lambda: main({}, {'pkg_fullname': ' .mypkg'}))
-    assert_raises(UserWarning, lambda: main({}, {'pkg_fullname': '.mypkg'}))
-    assert_raises(UserWarning, lambda: main({}, {'pkg_fullname': 'None.mypkg'}))
-
-    assert_raises(UserWarning, lambda: main({}, {'pkg_fullname': 'oa.o.mypkg'}))
+    for pkg in ('1mypkg', ' mypkg', '1', '1.mypkg',
+                ' .mypkg', '.mypkg', 'None.mypkg', 'oa.o.mypkg'):
+        assert_raises(UserWarning, lambda: main({}, {'pkg_fullname': pkg}))

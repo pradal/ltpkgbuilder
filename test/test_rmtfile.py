@@ -5,8 +5,8 @@ print(__file__)
 
 
 def test_rmtfile_ls():
-    assert set(ls('ltpkgbuilder_data/test/test1')) == {('subtest', True),
-                                          ('titi.txt', False)}
+    assert (set(ls('ltpkgbuilder_data/test/test1')) ==
+            {('subtest', True), ('titi.txt', False)})
 
 
 def test_rmtfile_get():

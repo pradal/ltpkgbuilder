@@ -4,7 +4,8 @@ try:
 except ImportError:
     from urllib2 import urlopen
 
-github_url = "https://raw.githubusercontent.com/revesansparole/ltpkgbuilder/master/src/ltpkgbuilder/version.py"
+github_url = ("https://raw.githubusercontent.com/revesansparole/"
+              "ltpkgbuilder/master/src/ltpkgbuilder/version.py")
 
 
 def get_github_version():

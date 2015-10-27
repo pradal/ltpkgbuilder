@@ -52,5 +52,3 @@ def test_revision_requires_integer2():
 print 'titi'
 """
     assert_raises(ValueError, lambda: get_revision(txt))
-
-

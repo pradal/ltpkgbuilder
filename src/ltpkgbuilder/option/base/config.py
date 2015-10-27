@@ -31,7 +31,7 @@ def main(pkg_cfg, extra):
             raise UserWarning("package name not valid: %s" % pkg_fullname)
 
     author_name = ask_arg("base.author_name", pkg_cfg, "moi", extra)
-    author_email = ask_arg("base.author_email", pkg_cfg, "moi@email.com", extra)
+    author_email = ask_arg("base.author_email", pkg_cfg, "moi@mail.com", extra)
 
     return dict(pkg_fullname=pkg_fullname,
                 pkgname=pkgname,

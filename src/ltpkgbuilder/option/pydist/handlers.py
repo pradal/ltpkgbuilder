@@ -10,12 +10,12 @@ def requirements(txt, env):
     reqs = set()
     for name in installed_options(env):
         try:
-            opt_require = import_module("ltpkgbuilder.option.%s.require" % name)
-            reqs.update(opt_require.install)
+            opt_req = import_module("ltpkgbuilder.option.%s.require" % name)
+            reqs.update(opt_req.install)
         except ImportError:
             raise KeyError("option '%s' does not exists" % name)
 
-    reqs_str = ", ".join(["'%s'" %n for n in reqs])
+    reqs_str = ", ".join(["'%s'" % n for n in reqs])
     return "install_requires=[%s]," % reqs_str
 
 

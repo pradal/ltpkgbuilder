@@ -31,7 +31,8 @@ def test_no_tempering_on_creation():
     regenerate_dir("ltpkgbuilder_data/test", tmp_dir, handlers, pkg_cfg)
 
     fnames = []
-    check_tempering("ltpkgbuilder_data/test", tmp_dir, handlers, pkg_cfg, fnames)
+    check_tempering("ltpkgbuilder_data/test", tmp_dir,
+                    handlers, pkg_cfg, fnames)
 
     assert len(fnames) == 0
 
@@ -47,7 +48,8 @@ def test_tempering_walk_deep_files_in_ltpkgbuilder_data():
         f.write("modification")
 
     fnames = []
-    check_tempering("ltpkgbuilder_data/test/test2", tmp_dir, handlers, pkg_cfg, fnames)
+    check_tempering("ltpkgbuilder_data/test/test2", tmp_dir,
+                    handlers, pkg_cfg, fnames)
 
     assert fnames == [tmp_dir + "/subtest/tutu.txt"]
 
@@ -62,7 +64,8 @@ def test_tempering_do_not_complain_if_removed_dirs():
     rmtree(tmp_dir + "/subtest")
 
     fnames = []
-    check_tempering("ltpkgbuilder_data/test/test2", tmp_dir, handlers, pkg_cfg, fnames)
+    check_tempering("ltpkgbuilder_data/test/test2", tmp_dir,
+                    handlers, pkg_cfg, fnames)
 
     assert len(fnames) == 0
 
@@ -81,7 +84,8 @@ def test_tempering_handle_src_directory():
         f.write("modification")
 
     fnames = []
-    check_tempering("ltpkgbuilder_data/test", tmp_dir, handlers, pkg_cfg, fnames)
+    check_tempering("ltpkgbuilder_data/test", tmp_dir,
+                    handlers, pkg_cfg, fnames)
 
     assert set(fnames) == {tmp_dir + "/src/myns/__init__.py",
                            tmp_dir + "/src/myns/mypkg/info.rst"}

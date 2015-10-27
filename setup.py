@@ -75,7 +75,7 @@ setup(
     install_requires=requirements,
     entry_points={
         'console_scripts': [
-              'manage = ltpkgbuilder.manage_script:main',
+            'manage = ltpkgbuilder.manage_script:main',
         ],
         # 'gui_scripts': [
         #      'fake_gui = openalea.fakepackage.amodule:gui_script',],
