@@ -79,7 +79,8 @@ with open("pkg_cfg.json", 'r') as f:
 pkg_cfg['base'] = dict(pkg_fullname='toto',
                        pkgname='toto',
                        namespace=None,
-                       author_name='moi')
+                       author_name='moi',
+                       author_email='moi@gmail.com')
 
 pkg_cfg['doc'] = dict(option=None)
 pkg_cfg['test'] = dict(option=None)

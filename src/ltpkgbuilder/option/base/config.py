@@ -14,10 +14,6 @@ def is_valid_identifier(name):
 
 def main(pkg_cfg, extra):
     pkg_fullname = ask_arg("base.pkg_fullname", pkg_cfg, "toto", extra)
-    # try:
-    #     pkg_fullname = extra["pkg_fullname"]
-    # except KeyError:
-    #     pkg_fullname = raw_input("package full name:")
 
     if "." in pkg_fullname:
         try:
@@ -34,10 +30,14 @@ def main(pkg_cfg, extra):
         if not is_valid_identifier(pkg_fullname):
             raise UserWarning("package name not valid: %s" % pkg_fullname)
 
+    author_name = ask_arg("base.author_name", pkg_cfg, "moi", extra)
+    author_email = ask_arg("base.author_email", pkg_cfg, "moi@email.com", extra)
+
     return dict(pkg_fullname=pkg_fullname,
                 pkgname=pkgname,
                 namespace=namespace,
-                author_name='moi')
+                author_name=author_name,
+                author_email=author_email)
 
 
 def after(pkg_cfg):

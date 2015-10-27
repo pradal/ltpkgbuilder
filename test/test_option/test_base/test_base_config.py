@@ -4,11 +4,15 @@ from ltpkgbuilder.option.base.config import main
 
 
 def test_base_config_handle_namespace():
-    pkg_cfg = main({}, {'pkg_fullname': 'mypkg'})
+    pkg_cfg = main({}, {'pkg_fullname': 'mypkg',
+                        'author_name': 'moi',
+                        'author_email': 'moi@mybox.com'})
     assert pkg_cfg['namespace'] is None
     assert pkg_cfg['pkgname'] == 'mypkg'
 
-    pkg_cfg = main({}, {'pkg_fullname': 'myns.mypkg'})
+    pkg_cfg = main({}, {'pkg_fullname': 'myns.mypkg',
+                        'author_name': 'moi',
+                        'author_email': 'moi@mybox.com'})
     assert pkg_cfg['namespace'] == 'myns'
     assert pkg_cfg['pkgname'] == 'mypkg'
 

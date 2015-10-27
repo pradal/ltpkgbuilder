@@ -7,7 +7,7 @@
 from setuptools import setup, find_packages
 
 
-short_descr = "{{key, pydist.description}}"
+short_descr = "{{key, doc.description}}"
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
@@ -29,7 +29,7 @@ setup(
     description=short_descr,
     long_description=readme + '\n\n' + history,
     author="{{key, base.author_name}}",
-    author_email='$author_email',
+    author_email='{{key, base.author_email}}',
     url=url,
     # {{license.setup,
     license="None",

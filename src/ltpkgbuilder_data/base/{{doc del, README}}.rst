@@ -1,15 +1,23 @@
 Short Description
 =================
 
-{{key, dist.description}}
+{{key, doc.description}}
 
 Install
 =======
 
+Download sources and use setup::
+
+    $ python setup.py install
+    or
+    $ python setup.py develop
+
+{{pypi rm,
 Use pip to install this package::
 
     $ pip install {{key, base.pkgname}}
 
+}}
 Use
 ===
 

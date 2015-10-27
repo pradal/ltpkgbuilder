@@ -121,7 +121,9 @@ def test_clean_do_not_explore_hidden_directories():
 
 
 def test_add_already_existing_option_raises_warning():
-    pkg_cfg = add_option('base', {}, extra={'pkg_fullname': 'toto'})
+    pkg_cfg = add_option('base', {}, extra={'pkg_fullname': 'toto',
+                                            'author_name': 'moi',
+                                            'author_email': 'moi@mybox.com'})
     assert_raises(UserWarning, lambda: add_option('base', pkg_cfg))
 
 
@@ -137,7 +139,8 @@ def test_manage_update_pkg_do_not_change_installed_options():
     pkg_cfg = {'base': dict(pkg_fullname='toto',
                             pkgname='toto',
                             namespace=None,
-                            author_name='moi')}
+                            author_name='moi',
+                            author_email='moi@mybox.com')}
 
     mem = dict(pkg_cfg['base'])
 
@@ -155,7 +158,8 @@ def test_manage_update_pkg_requires_user_input():
     pkg_cfg = {'base': dict(pkg_fullname='toto',
                             pkgname='toto',
                             namespace=None,
-                            author_name='moi')}
+                            author_name='moi',
+                            author_email='moi@mybox.com')}
 
     mem = dict(pkg_cfg['base'])
 
@@ -174,7 +178,9 @@ def test_manage_update_opt_raise_error_if_not_already_installed():
 
 def test_manage_update_same_opt_do_not_change_anything():
     pkg_cfg = {'hash': {}}
-    pkg_cfg = add_option('base', pkg_cfg, {"pkg_fullname": 'toto'})
+    pkg_cfg = add_option('base', pkg_cfg, {"pkg_fullname": 'toto',
+                                            'author_name': 'moi',
+                                            'author_email': 'moi@mybox.com'})
 
     mem = dict(pkg_cfg['base'])
     pkg_cfg = update_option('base', pkg_cfg)
@@ -188,7 +194,9 @@ def test_manage_edit_opt_raise_error_if_not_already_installed():
 
 def test_manage_edit_opt_with_defaults_do_not_change_anything():
     pkg_cfg = {'hash': {}}
-    pkg_cfg = add_option('base', pkg_cfg, {"pkg_fullname": 'toto'})
+    pkg_cfg = add_option('base', pkg_cfg, {"pkg_fullname": 'toto',
+                                            'author_name': 'moi',
+                                            'author_email': 'moi@mybox.com'})
 
     mem = dict(pkg_cfg['base'])
     with mock.patch('ltpkgbuilder.option_tools.loc_input', return_value=''):
@@ -205,10 +213,10 @@ def test_regenerate():
 
 @with_setup(setup, teardown)
 def test_regenerate_raise_error_if_tempered_files():
-    pkg_cfg = {'doc': {}, 'hash': {}}
+    pkg_cfg = {'test': {}, 'hash': {}}
     regenerate(pkg_cfg, tmp_dir)
 
-    with open(tmp_dir + "/doc/info.rst", 'w') as f:
+    with open(tmp_dir + "/test/info.rst", 'w') as f:
         f.write("tempered")
 
     assert_raises(UserWarning, lambda: regenerate(pkg_cfg, tmp_dir))
