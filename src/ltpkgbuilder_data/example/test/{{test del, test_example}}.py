@@ -34,13 +34,17 @@ def test_main():
     ex.main()
 
 
-def test_example_func():
-    assert ex.example_func("txt") == "txt"
+def test_example_func_default_to_beau_texte():
+    assert ex.example_func() == "beau texte"
 
 
-def test_ExampleClass_creation():
+def test_example_func_default_return_given_txt():
+    assert ex.example_func("random") == "random"
+
+
+def test_example_class_creation():
     eg = ex.ExampleClass()
-    assert eg.txt() == "{{key, base.pkgname}}"
+    assert eg.txt() == "texte encore plus beau"
 
 
 class TestExampleClass(object):
@@ -59,4 +63,4 @@ class TestExampleClass(object):
 
     def test_method(self):
         print("test method")
-        assert self.eg.txt() == "{{key, base.pkgname}}"
+        assert self.eg.txt() == "texte encore plus beau"

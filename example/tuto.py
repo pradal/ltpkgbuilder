@@ -15,44 +15,52 @@ else:
 pkg_dir = "pkg_tata"
 venv_dir = "venv_toto"
 
-# if exists(venv_dir):
-#     rmtree(venv_dir)
+
+def find_wheel(name):
+    for fname in glob("wheels/*.whl"):
+        if name in fname:
+            return fname
+
+
+def create_venv():
+    try:
+        if exists(venv_dir):
+            rmtree(venv_dir)
+
+    except OSError:
+        print("unable to create dir")
+        sys.exit(0)
+
+    call("virtualenv %s" % venv_dir, shell=True)
+
+    # install requirements from local depot
+    reqs = ["six", "pbr", "funcsigs", "nose", "coverage", "mock", "lice"]
+
+    for req in reqs:
+        whl = find_wheel(req)
+        if whl is not None:
+            call("pip install %s" % whl)
+
 
 try:
     if exists(pkg_dir):
         rmtree(pkg_dir)
 
     mkdir(pkg_dir)
-except WindowsError:
+except OSError:
     print("unable to create dir")
     sys.exit(0)
 
 # generate virtual env for this session
-# call("virtualenv %s" % venv_dir, shell=True)
+if len(argv) > 2:
+    create_venv()
+
 execfile("%s/Scripts/activate_this.py" % venv_dir,
          dict(__file__="%s/Scripts/activate_this.py" % venv_dir))
 
 cwd = getcwd()
 
-# install requirements from local depot
-# reqs = ["six", "pbr", "funcsigs", "nose", "coverage", "mock", "lice"]
-#
-# chdir("wheels")
-#
-#
-# def find_wheel(name):
-#     for fname in glob("*.whl"):
-#         if name in fname:
-#             return fname
-#
-# for req in reqs:
-#     whl = find_wheel(req)
-#     if whl is not None:
-#         call("pip install %s" % whl)
-
-
 # install ltpkgbuiler
-# chdir("..")
 chdir("..")
 
 call("python setup.py %s" % install_mode, shell=True)
@@ -79,12 +87,12 @@ pkg_cfg['license'] = dict(name="mit",
                           year="2015",
                           organization="oa",
                           project="toto")
-pkg_cfg['github'] = dict(user="revesansparole",
-                         project="toto")
+pkg_cfg['version'] = dict(major="0", minor="5", post="0")
 pkg_cfg['pydist'] = dict(description="belle description",
                          keywords="keys, words")
-pkg_cfg['plugin'] = dict(option=None)
-pkg_cfg['version'] = dict(major="0", minor="5", post="0")
+# pkg_cfg['github'] = dict(user="revesansparole",
+#                          project="toto")
+# pkg_cfg['plugin'] = dict(option=None)
 
 with open("pkg_cfg.json", 'w') as f:
     json.dump(pkg_cfg, f)
@@ -92,7 +100,7 @@ with open("pkg_cfg.json", 'w') as f:
 call("manage regenerate")
 
 call("manage add -opt example -e option_name base")
-call("manage add -opt example -e option_name plugin")
+call("manage add -opt example -e option_name test")
 
 call("manage regenerate")
 
@@ -106,3 +114,5 @@ call("manage regenerate")
 # call("manage regenerate")
 #
 # call("manage edit -opt base")
+
+call("nosetests")

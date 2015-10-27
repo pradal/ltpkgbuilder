@@ -1,12 +1,10 @@
-""" Set of examples to explore most python package behaviour.
-
-Documentation of the module
+""" Example module to uni-test, see test/test_example
 """
 
 import os
 
 
-def example_func(txt="{{key, base.pkgname}}"):
+def example_func(txt="beau texte"):
     """Print txt message and return it.
     """
     print(txt)
@@ -19,10 +17,10 @@ class ExampleClass(object):
     """
 
     def __init__(self):
-        self.repo_name = "{{key, base.pkgname}}"
+        self._txt = "texte encore plus beau"
 
     def txt(self):
-        return self.repo_name
+        return self._txt
 
 
 def main():
