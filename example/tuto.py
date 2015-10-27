@@ -90,6 +90,8 @@ pkg_cfg['license'] = dict(name="mit",
 pkg_cfg['version'] = dict(major="0", minor="5", post="0")
 pkg_cfg['pydist'] = dict(description="belle description",
                          keywords="keys, words")
+pkg_cfg['coverage'] = dict(option=None)
+
 # pkg_cfg['github'] = dict(user="revesansparole",
 #                          project="toto")
 # pkg_cfg['plugin'] = dict(option=None)
