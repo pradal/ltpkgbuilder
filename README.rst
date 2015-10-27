@@ -1,3 +1,7 @@
+.. |base| replace:: `base`_
+
+.. _replacement_definitions:
+
 =========================
 Long Term Package Builder
 =========================
@@ -104,7 +108,7 @@ Add Package Structure Functionality
 Package Builder provide a set of options to introduce new functionality to an
 already existing package:
 
- - base_: base option, basic package management
+ - |base|: base option, basic package management
  - license: will help the developer to choose a license and add the relevant
    files
  - doc: Add some documentation to your package

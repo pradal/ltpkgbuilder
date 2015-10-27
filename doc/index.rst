@@ -10,6 +10,7 @@ Contents:
    readme
    installation
    usage
+   tutorials
    option_list
    contributing
    authors

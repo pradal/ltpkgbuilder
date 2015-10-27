@@ -1,4 +1,5 @@
-.. include:: ../README.rst
-   :end-before: links_section
+.. |base| replace:: :doc:`option/base/main`
 
-.. _base: option/base/main.html
+.. include:: ../README.rst
+   :start-after: replacement_definitions:
+   :end-before: links_section
