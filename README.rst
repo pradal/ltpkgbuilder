@@ -1,3 +1,4 @@
+=========================
 Long Term Package Builder
 =========================
 
@@ -29,7 +30,7 @@ of a python programmer as easy as possible by providing two core functions:
 .. _Python: http://python.org
 
 Quick start
------------
+===========
 
 Create a virtual environment for development::
 
@@ -61,7 +62,7 @@ maybe the 'base' option that will create a 'src' directory to put your code in i
 .. _ltpkgbuilder: https://github.com/revesansparole/ltpkgbuilder
 
 Upgrade Package Structure
--------------------------
+=========================
 
 Packages generated with Package Builder contains three different types of files:
 
@@ -98,12 +99,12 @@ in case of conflicts but it is your responsibility to solve them and relaunch th
 command.
 
 Add Package Structure Functionality
------------------------------------
+===================================
 
 Package Builder provide a set of options to introduce new functionality to an
 already existing package:
 
- - :doc:`option/base/main`: base option, basic package management
+ - base_: base option, basic package management
  - license: will help the developer to choose a license and add the relevant
    files
  - doc: Add some documentation to your package
@@ -131,7 +132,7 @@ already existing package:
 .. _PEP8: https://www.python.org/dev/peps/pep-0008/
 
 Install a new option
-********************
+--------------------
 
 To install a new option call the 'add' action::
 
@@ -159,7 +160,7 @@ regenerate to see the action of the new options on your package::
 .. _lice: https://github.com/licenses/lice
 
 Install example files
-*********************
+---------------------
 
 Each option comes with some example files that can be installed with the special
 directive::
@@ -180,7 +181,7 @@ them at any time (you'll be prompted for action if conflicts occur).
           (dvlpt)toto$ manage add -opt example -e option_name base
 
 Edit an option
-**************
+--------------
 
 You can simply edit an option (e.g. license) by running the command::
 
@@ -190,7 +191,7 @@ You'll be re-prompted for the values of arguments of this option with default to
 previously entered values.
 
 Extra services
---------------
+==============
 
 .. warning:: TODO
 
@@ -211,7 +212,7 @@ modules follow code best practices:
 .. _plugin: openalea.plugin
 
 Contributing
-------------
+============
 
 You can contribute to this package by:
 
@@ -219,3 +220,7 @@ You can contribute to this package by:
  - correcting some bugs
  - closing a few issues
  - implementing a new option to add a new functionality to package structures
+
+
+.. _links_section: "section header"
+.. _base: https://readthedocs/toto

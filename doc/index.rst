@@ -1,6 +1,4 @@
-.. ltpkgbuilder documentation master file, created by
-   sphinx-quickstart on Tue Jul  9 22:26:36 2013.
-
+=====================================================
 Welcome to Long Term Package Builder's documentation!
 =====================================================
 
@@ -12,6 +10,7 @@ Contents:
    readme
    installation
    usage
+   option_list
    contributing
    authors
    history
