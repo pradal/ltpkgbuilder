@@ -6,6 +6,10 @@
 Long Term Package Builder
 =========================
 
+.. image:: https://readthedocs.org/projects/ltpkgbuilder/badge/?version=latest
+    :alt: Documentation Status
+    :target: http://ltpkgbuilder.readthedocs.org/en/latest/?badge=latest
+
 .. image:: https://coveralls.io/repos/revesansparole/ltpkgbuilder/badge.svg?branch=master&service=github
     :alt: Coverage report status
     :target: https://coveralls.io/github/revesansparole/ltpkgbuilder?branch=master
