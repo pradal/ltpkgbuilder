@@ -227,4 +227,4 @@ You can contribute to this package by:
 
 
 .. _links_section: "section header"
-.. _base: https://readthedocs/toto
+.. _base: http://ltpkgbuilder.readthedocs.org/en/latest/option/base/main.html
