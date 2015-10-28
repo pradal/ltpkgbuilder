@@ -65,7 +65,8 @@ Run 'manage' inside this directory::
 
 This will create the bare basic minimum for a python package. Add more options
 (see `Add Package Structure Functionality`_ for more options) afterward. Especially,
-maybe the 'base' option that will create a 'src' directory to put your code in it.
+since in the example above we just added the 'base' option that will create a 'src'
+directory to put your code in it.
 
 .. _ltpkgbuilder: https://github.com/revesansparole/ltpkgbuilder
 
